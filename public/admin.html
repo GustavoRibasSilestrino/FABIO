@@ -134,7 +134,20 @@
           </div>
           <div class="campo adm-grade__tudo">
             <label for="i-bairro">Bairro</label>
-            <input class="entrada" id="i-bairro" type="text" autocomplete="off" maxlength="80" required>
+            <div class="select">
+              <select id="i-bairro" required></select>
+              <svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg>
+            </div>
+            <p class="adm-ajuda">A lista muda conforme a cidade. Se o bairro não estiver nela, escolha “Outro bairro” e digite o nome: ele passa a aparecer na busca do site.</p>
+          </div>
+          <div class="campo adm-grade__tudo" id="campo-bairro-outro" hidden>
+            <label for="i-bairro-outro">Nome do bairro</label>
+            <input class="entrada" id="i-bairro-outro" type="text" autocomplete="off" maxlength="80">
+          </div>
+          <div class="campo adm-grade__tudo">
+            <label for="i-codigo">Código do imóvel <span class="adm-opcional">(opcional)</span></label>
+            <input class="entrada" id="i-codigo" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="20" placeholder="Deixe vazio para gerar sozinho (FB-101, FB-102…)">
+            <p class="adm-ajuda">É o código que o cliente digita na busca do site. Pode usar o seu próprio, com letras, números e hífen.</p>
           </div>
           <div class="campo adm-grade__tudo">
             <label for="i-titulo">Título do anúncio <span class="adm-opcional">(opcional)</span></label>
@@ -216,6 +229,7 @@
 
 <script src="/js/config.js"></script>
 <script src="/js/comum.js"></script>
+<script src="/js/bairros.js"></script>
 <script src="/js/vendor/supabase.js"></script>
 <script src="/js/admin.js"></script>
 </body>

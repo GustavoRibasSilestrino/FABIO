@@ -23,6 +23,7 @@ public/
   js/main.js        busca/filtro, formulário → WhatsApp, menu, animações de rolagem
   js/config.js      endereço e chave pública do Supabase (único arquivo de ligação)
   js/comum.js       cidades, tipos de imóvel e funções usadas pelo site e pelo painel
+  js/bairros.js     bairros de cada cidade (base de CEPs dos Correios), usados na busca e no painel
   js/imoveis.js     lê os imóveis do Supabase, monta os cartões e a galeria de fotos
   js/admin.js       login, cadastro de imóveis e envio de fotos
   js/vendor/        supabase-js (biblioteca, copiada para cá; licença MIT)
@@ -49,7 +50,8 @@ A coluna "Hoje" diz o que já é real (informado pelo Fábio) e o que ainda é *
 | Fotos do topo, dos imóveis e dos ambientes | `public/assets/img/` (mantenha os nomes ou ajuste os `src` no HTML) | Unsplash |
 | Foto do Fábio | seção `#sobre` em `public/index.html` e `public/assets/img/fabio-ribas.jpg` | foto real (enviada pelo Fábio) |
 | Imóveis (código, bairro, quartos, preço, fotos, texto) | cadastrados pelo painel `/admin` (veja abaixo). Os 6 cartões `.imovel` de `public/index.html` são só de exemplo | exemplos aparecem enquanto não houver nenhum imóvel real cadastrado; no primeiro imóvel real eles somem sozinhos (e dá para apagá-los do HTML) |
-| Cidades e bairro da busca | `<select id="f-cidade">` (lista de cidades) e `<input id="f-bairro">` (o visitante digita o bairro) em `public/index.html`; a busca compara o texto com o `data-bairro` de cada imóvel, sem acento e sem maiúsculas; cada imóvel tem `data-cidade` | cidades informadas pelo Fábio; bairros dos cartões são de exemplo |
+| Cidades e bairros da busca | `<select id="f-cidade">` (3 cidades) em `public/index.html`; o campo Bairro (`<select id="f-bairro">`) lista os bairros da cidade escolhida, vindos de `public/js/bairros.js`, mais os bairros dos imóveis já cadastrados. Cada imóvel tem cidade e bairro | cidades informadas pelo Fábio; bairros da base de CEPs dos Correios (195 em Santa Bárbara d’Oeste, 259 em Americana, 91 em Nova Odessa), sem os códigos de zoneamento |
+| Busca por código | linha "Código" no painel de busca do topo (`#busca-codigo`, `#f-codigo`), tratada em `public/js/main.js`; aceita "FB-101", "fb101" ou só "101" | funciona com o código de cada imóvel (gerado como FB-101, FB-102… ou escolhido no painel) |
 | Textos de apresentação, "como funciona" e promessas | `public/index.html` | texto provisório, confirmar com o Fábio |
 | Instagram e depoimentos reais | ainda não existem na página | a adicionar |
 | Aviso "Imóveis de demonstração" e selos "Ilustrativo" | `.demo-nota` e `.selo--demo` | remover ao colocar imóveis reais |
@@ -67,6 +69,9 @@ O Fábio entra em `https://fabioribasimoveis.com.br/admin` com e-mail e senha e 
 - **Se a chave ainda não estiver preenchida:** o site mostra os exemplos do HTML e o painel avisa que não está conectado.
 - **Se o Supabase não responder** (por exemplo, projeto gratuito pausado por falta de uso): o site mostra "Não conseguimos carregar os imóveis agora" com o botão de WhatsApp. Para voltar, abra o projeto no painel do Supabase e use **Restore project**.
 - **Senha esquecida:** o link "Esqueci minha senha" do painel envia um e-mail de recuperação. Os endereços `https://fabioribasimoveis.com.br/admin` e `https://fabio-imoveis.vercel.app/admin` precisam estar em Authentication > URL Configuration > Redirect URLs.
+
+- **Bairro:** no cadastro, o bairro é escolhido numa lista que muda com a cidade. Se faltar, "Outro bairro (digitar)" aceita o nome e ele passa a aparecer também na busca do site.
+- **Código:** o painel gera FB-101, FB-102… Se preferir, o Fábio pode digitar o próprio código (letras, números e hífen, até 20 caracteres; não pode repetir). É o que o cliente usa em "Buscar código".
 
 Os valores aceitos em `tipo` são: casa, casa-condominio, sobrado, apartamento, terreno, chacara, sitio e comercial. As cidades e os tipos exibidos estão em `public/js/comum.js`; para incluir uma cidade nova, edite a lista `CIDADES` ali e o `<select id="f-cidade">` de `public/index.html`.
 

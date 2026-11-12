@@ -117,7 +117,12 @@
           </div>
           <div class="campo">
             <label for="f-bairro">Bairro</label>
-            <input id="f-bairro" class="entrada" name="bairro" type="text" placeholder="Digite o bairro" autocomplete="off" autocapitalize="words" spellcheck="false" enterkeyhint="search">
+            <div class="select">
+              <select id="f-bairro" name="bairro" class="is-vazio" disabled>
+                <option value="" selected>Escolha a cidade primeiro</option>
+              </select>
+              <svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg>
+            </div>
           </div>
           <div class="campo">
             <label for="f-quartos">Quartos</label>
@@ -132,7 +137,18 @@
             </div>
           </div>
           <button class="btn btn--ink busca__ok" type="submit"><svg class="i" aria-hidden="true"><use href="#i-search"/></svg>Buscar imóveis</button>
+
+          <!-- busca pelo código: os campos ficam dentro do painel, mas pertencem ao formulário vazio logo abaixo (form="busca-codigo") -->
+          <div class="busca__codigo">
+            <label class="sr-only" for="f-codigo">Código do imóvel</label>
+            <div class="busca__codigo-linha">
+              <input id="f-codigo" class="entrada" form="busca-codigo" name="codigo" type="text" placeholder="Código (FB-101)" maxlength="20" autocomplete="off" autocapitalize="characters" spellcheck="false" enterkeyhint="search" aria-describedby="codigo-msg">
+              <button class="btn btn--ghost busca__codigo-ok" type="submit" form="busca-codigo">Buscar código</button>
+            </div>
+            <p class="erro" id="codigo-msg" role="alert"></p>
+          </div>
         </form>
+        <form id="busca-codigo" novalidate></form>
 
         <ul class="hero__prova">
           <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>CRECI <span data-site="creci">195959</span></li>
@@ -507,6 +523,7 @@
 
 <script src="js/config.js" defer></script>
 <script src="js/comum.js" defer></script>
+<script src="js/bairros.js" defer></script>
 <script src="js/imoveis.js" defer></script>
 <script src="js/main.js" defer></script>
 </body>

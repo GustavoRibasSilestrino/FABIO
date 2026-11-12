@@ -51,6 +51,7 @@
     if (texto.includes('failed to fetch') || texto.includes('network') || texto.includes('load failed')) {
       return 'Sem conexão com a internet. Confira e tente de novo.';
     }
+    if (codigo === '23505' || texto.includes('duplicate key')) return 'Já existe um imóvel com esse código. Escolha outro.';
     if (texto.includes('rate limit') || (e && e.status === 429)) return 'Muitas tentativas. Espere alguns minutos e tente de novo.';
     if (texto.includes('password should be') || texto.includes('weak')) return 'Senha fraca. Use pelo menos 8 caracteres, com letras e números.';
     if (texto.includes('same password') || texto.includes('different from the old')) return 'A nova senha precisa ser diferente da atual.';
@@ -271,8 +272,34 @@
 
   let edicao = null; // { id, novo, codigo, fotos, originais, novas, enviando }
 
+  /* bairro: lista da cidade escolhida (js/bairros.js) + bairros já usados em outros imóveis + "Outro bairro" */
+  const OUTRO = '__outro__';
+  const selBairro = $('#i-bairro');
+  const normaliza = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  const mostraOutro = () => { $('#campo-bairro-outro').hidden = selBairro.value !== OUTRO; };
+  const montaBairros = (cidade, atual) => {
+    const lista = new Map(((F.BAIRROS && F.BAIRROS[cidade]) || []).map(n => [normaliza(n), n]));
+    imoveis.filter(i => i.cidade === cidade).forEach(i => {
+      if (!lista.has(normaliza(i.bairro))) lista.set(normaliza(i.bairro), i.bairro);
+    });
+    if (atual && !lista.has(normaliza(atual))) lista.set(normaliza(atual), atual);
+    const nomes = [...lista.values()].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+    selBairro.replaceChildren(
+      h('option', { value: '', text: 'Escolha o bairro' }),
+      ...nomes.map(n => h('option', { value: n, text: n })),
+      h('option', { value: OUTRO, text: 'Outro bairro (digitar)' }));
+    selBairro.value = atual ? lista.get(normaliza(atual)) : '';
+    mostraOutro();
+  };
+  selCidade.addEventListener('change', () => montaBairros(selCidade.value, ''));
+  selBairro.addEventListener('change', () => {
+    mostraOutro();
+    if (selBairro.value === OUTRO) $('#i-bairro-outro').focus();
+  });
+
   const campos = {
-    tipo: selTipo, cidade: selCidade, bairro: $('#i-bairro'), titulo: $('#i-titulo'),
+    tipo: selTipo, cidade: selCidade, bairro: selBairro, bairroOutro: $('#i-bairro-outro'), codigo: $('#i-codigo'),
+    titulo: $('#i-titulo'),
     quartos: $('#i-quartos'), banheiros: $('#i-banheiros'), vagas: $('#i-vagas'), area: $('#i-area'),
     preco: $('#i-preco'), descricao: $('#i-descricao'), destaque: $('#i-destaque')
   };
@@ -305,7 +332,9 @@
 
     campos.tipo.value = novo ? 'casa' : im.tipo;
     campos.cidade.value = novo ? F.CIDADES[0].v : im.cidade;
-    campos.bairro.value = novo ? '' : im.bairro;
+    montaBairros(campos.cidade.value, novo ? '' : im.bairro);
+    campos.bairroOutro.value = '';
+    campos.codigo.value = novo ? '' : im.codigo;
     campos.titulo.value = novo ? '' : (im.titulo || '');
     campos.quartos.value = novo || im.quartos == null ? '' : im.quartos;
     campos.banheiros.value = novo || im.banheiros == null ? '' : im.banheiros;
@@ -450,10 +479,17 @@
 
   const leForm = () => {
     Object.values(campos).forEach(c => c.removeAttribute('aria-invalid'));
-    const bairro = campos.bairro.value.trim();
+    const outro = campos.bairro.value === OUTRO;
+    const bairro = (outro ? campos.bairroOutro.value : campos.bairro.value).trim();
     if (!bairro) {
-      campos.bairro.setAttribute('aria-invalid', 'true');
-      return { erro: 'Informe o bairro.', campo: campos.bairro };
+      const campo = outro ? campos.bairroOutro : campos.bairro;
+      campo.setAttribute('aria-invalid', 'true');
+      return { erro: outro ? 'Digite o nome do bairro.' : 'Escolha o bairro.', campo };
+    }
+    const codigo = campos.codigo.value.trim().toUpperCase();
+    if (codigo && !/^[A-Z0-9][A-Z0-9-]{0,19}$/.test(codigo)) {
+      campos.codigo.setAttribute('aria-invalid', 'true');
+      return { erro: 'No código use só letras, números e hífen (sem espaços).', campo: campos.codigo };
     }
     const quartos = numeroOuNulo(campos.quartos, 'Quartos', { inteiro: true, max: 50 });
     const banheiros = numeroOuNulo(campos.banheiros, 'Banheiros', { inteiro: true, max: 50 });
@@ -476,7 +512,8 @@
         preco: digitos ? Number(digitos) : null,
         descricao: campos.descricao.value.trim() || null,
         destaque: campos.destaque.checked,
-        status
+        status,
+        ...(codigo ? { codigo } : {}) // vazio: o banco cria sozinho (FB-101, FB-102…) ou mantém o atual
       }
     };
   };

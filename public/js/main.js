@@ -47,7 +47,7 @@
   const form = $('#busca');
   const selCidade = $('#f-cidade');
   const selTipo = $('#f-tipo');
-  const campoBairro = $('#f-bairro');
+  const selBairro = $('#f-bairro');
   const selQuartos = $('#f-quartos');
   const filtro = $('.filtro');
   const grade = $('#grade');
@@ -58,13 +58,47 @@
 
   const state = { cidade: selCidade.value, tipo: '', bairro: '', quartos: 0 };
 
-  // o bairro é digitado: comparamos sem acento, sem maiúsculas e sem pontuação ("vila linopolis" acha "Vila Linópolis")
+  // nomes comparados sem acento, sem maiúsculas e sem pontuação ("vila linopolis" = "Vila Linópolis")
   const normaliza = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '')
     .toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 
   // sem cidade escolhida, o campo mostra só a orientação "Escolha a cidade" (em tom mais suave)
   const marcaCidade = () => selCidade.classList.toggle('is-vazio', !selCidade.value);
-  selCidade.addEventListener('change', marcaCidade);
+  const marcaBairro = () => selBairro.classList.toggle('is-vazio', !selBairro.value);
+
+  /* Bairros: ao escolher a cidade, o campo lista todos os bairros dela (js/bairros.js) mais qualquer
+     bairro de imóvel já cadastrado que ainda não esteja na lista. */
+  const BAIRROS = (window.FABIO && window.FABIO.BAIRROS) || {};
+  const nomeBairroDoCartao = c => {
+    const dd = c.querySelector('.etiqueta div:last-child dd');
+    return dd ? dd.textContent.trim() : c.dataset.bairro;
+  };
+  const bairrosDaCidade = cidade => {
+    const lista = new Map();
+    (BAIRROS[cidade] || []).forEach(n => lista.set(normaliza(n), n));
+    cards.filter(c => c.dataset.cidade === cidade).forEach(c => {
+      const n = nomeBairroDoCartao(c);
+      if (n && !lista.has(normaliza(n))) lista.set(normaliza(n), n);
+    });
+    return [...lista.values()].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+  };
+  const preencheBairros = manter => {
+    const cidade = selCidade.value;
+    const atual = manter ? selBairro.value : '';
+    selBairro.replaceChildren();
+    if (!cidade) {
+      selBairro.append(new Option('Escolha a cidade primeiro', ''));
+      selBairro.disabled = true;
+    } else {
+      selBairro.append(new Option('Todos os bairros', ''));
+      bairrosDaCidade(cidade).forEach(n => selBairro.append(new Option(n, n)));
+      selBairro.disabled = false;
+      if (atual && [...selBairro.options].some(o => o.value === atual)) selBairro.value = atual;
+    }
+    marcaBairro();
+  };
+  selCidade.addEventListener('change', () => { marcaCidade(); preencheBairros(false); });
+  selBairro.addEventListener('change', marcaBairro);
 
   const render = (animate) => {
     let shown = 0;
@@ -73,7 +107,7 @@
       const ok =
         (!state.cidade || d.cidade === state.cidade) &&
         (!state.tipo || d.tipo === state.tipo) &&
-        (!state.bairro || normaliza(d.bairro).includes(state.bairro)) &&
+        (!state.bairro || normaliza(d.bairro) === state.bairro) &&
         (!state.quartos || Number(d.quartos) >= state.quartos);
       card.hidden = !ok;
       card.classList.remove('is-entrando');
@@ -97,7 +131,7 @@
   const readSelects = () => {
     state.cidade = selCidade.value;
     state.tipo = selTipo.value;
-    state.bairro = normaliza(campoBairro.value);
+    state.bairro = normaliza(selBairro.value);
     state.quartos = Number(selQuartos.value);
   };
 
@@ -118,15 +152,61 @@
     render(true);
   });
 
-  $('#limpar').addEventListener('click', () => {
+  const limpaFiltros = () => {
     selCidade.selectedIndex = 0;
     state.cidade = selCidade.value; state.tipo = ''; state.bairro = ''; state.quartos = 0;
-    selTipo.value = ''; campoBairro.value = ''; selQuartos.value = '0';
+    selTipo.value = ''; selQuartos.value = '0';
     marcaCidade();
-    render(true);
+    preencheBairros(false);
+  };
+  $('#limpar').addEventListener('click', () => { limpaFiltros(); render(true); });
+
+  /* ---------- Busca pelo código do imóvel ---------- */
+  const formCodigo = $('#busca-codigo');
+  const campoCodigo = $('#f-codigo');
+  const msgCodigo = $('#codigo-msg');
+  const chaveCodigo = s => String(s).toLowerCase().replace(/[^a-z0-9]/g, '');
+  // os cartões de exemplo do HTML não têm data-codigo: vem da etiqueta (Código FB-101)
+  const marcaCodigos = () => cards.forEach(c => {
+    if (c.dataset.codigo) return;
+    const dd = c.querySelector('.etiqueta dd');
+    if (dd) c.dataset.codigo = dd.textContent.trim();
+  });
+  const erroCodigo = txt => {
+    msgCodigo.textContent = txt;
+    if (txt) campoCodigo.setAttribute('aria-invalid', 'true'); else campoCodigo.removeAttribute('aria-invalid');
+  };
+  campoCodigo.addEventListener('input', () => erroCodigo(''));
+
+  formCodigo.addEventListener('submit', e => {
+    e.preventDefault();
+    const digitado = campoCodigo.value.trim();
+    const chave = chaveCodigo(digitado);
+    if (!chave) { erroCodigo('Digite o código do imóvel.'); campoCodigo.focus(); return; }
+    // "101", "fb101" e "FB-101" valem para o mesmo imóvel
+    const card = cards.find(c => {
+      const k = chaveCodigo(c.dataset.codigo || '');
+      return k === chave || (/^\d+$/.test(chave) && k === 'fb' + chave);
+    });
+    if (!card) {
+      erroCodigo(`Não encontramos o código ${digitado.toUpperCase()}. Confira o número ou chame a gente no WhatsApp.`);
+      return;
+    }
+    erroCodigo('');
+    limpaFiltros();           // o imóvel pode estar escondido por um filtro da busca
+    render(false);
+    resultado.textContent = `Imóvel ${card.dataset.codigo} encontrado.`;
+    $$('.imovel.is-achado').forEach(c => c.classList.remove('is-achado'));
+    card.classList.add('is-achado');
+    card.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+    const alvoFoco = card.querySelector('.imovel__abrir') || card.querySelector('.imovel__pe a');
+    setTimeout(() => { if (alvoFoco) alvoFoco.focus({ preventScroll: true }); }, reduceMotion ? 0 : 600);
+    setTimeout(() => card.classList.remove('is-achado'), 4500);
   });
 
   marcaCidade();
+  marcaCodigos();
+  preencheBairros(false);
   render(false);
 
   /* ---------- Formulário de contato → WhatsApp ---------- */
@@ -193,6 +273,8 @@
   /* ---------- Quando js/imoveis.js troca os cartões pelos imóveis cadastrados no painel ---------- */
   document.addEventListener('imoveis:atualizados', () => {
     cards = $$('.imovel');
+    marcaCodigos();
+    preencheBairros(true);
     preencheWa($('#imoveis'));
     if (obsFlutuante) $$('#imoveis a[data-wa]').forEach(el => obsFlutuante.observe(el));
     vistos.forEach(el => { if (!el.isConnected) vistos.delete(el); });
