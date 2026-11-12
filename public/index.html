@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Fábio Ribas | Corretor de Imóveis</title>
-  <meta name="description" content="Compre, venda ou avalie seu imóvel com atendimento direto do corretor Fábio Ribas (CRECI 195959). Casas, sobrados e apartamentos, da primeira visita à entrega das chaves.">
+  <meta name="description" content="Compre, venda ou avalie seu imóvel com atendimento direto, pelo WhatsApp. Casas, sobrados, apartamentos, terrenos, chácaras e sítios, da primeira visita à entrega das chaves. Fábio Ribas, CRECI 195959.">
   <!-- Site em construção com conteúdo ilustrativo: remova a linha abaixo quando os dados reais estiverem no ar. -->
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#0D5C41">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:title" content="Fábio Ribas | Corretor de Imóveis">
-  <meta property="og:description" content="Compre ou venda seu imóvel com atendimento direto do corretor, pelo WhatsApp.">
+  <meta property="og:description" content="Compre, venda ou avalie seu imóvel com atendimento direto, pelo WhatsApp.">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
   <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -75,11 +75,11 @@
     <div class="hero__in wrap">
       <div class="hero__copy">
         <h1 id="hero-titulo">Encontre o seu imóvel&nbsp;ideal.</h1>
-        <p class="hero__sub">O Fábio acompanha você da primeira visita à entrega das chaves. Atendimento direto, pelo WhatsApp, sem enrolação.</p>
+        <p class="hero__sub">Nós acompanhamos você da primeira visita à entrega das chaves. Atendimento direto, pelo WhatsApp, sem enrolação.</p>
 
         <div class="hero__acoes">
           <a class="btn btn--primary btn--lg" id="hero-cta" href="#contato" data-wa="Olá, Fábio! Vi seu site e quero conversar sobre imóveis.">
-            <svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>Chamar o Fábio no WhatsApp
+            <svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>Chamar no WhatsApp
           </a>
           <a class="link-seta" href="#vender">Quero vender meu imóvel<svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
         </div>
@@ -104,8 +104,13 @@
               <select id="f-tipo" name="tipo">
                 <option value="">Todos</option>
                 <option value="casa">Casa</option>
+                <option value="casa-condominio">Casa em condomínio</option>
                 <option value="sobrado">Sobrado</option>
                 <option value="apartamento">Apartamento</option>
+                <option value="terreno">Terreno</option>
+                <option value="chacara">Chácara</option>
+                <option value="sitio">Sítio</option>
+                <option value="comercial">Imóvel comercial</option>
               </select>
               <svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg>
             </div>
@@ -157,6 +162,7 @@
         <div class="filtro" role="group" aria-label="Filtrar por tipo">
           <button type="button" class="chip" data-tipo="" aria-pressed="true">Todos</button>
           <button type="button" class="chip" data-tipo="casa" aria-pressed="false">Casas</button>
+          <button type="button" class="chip" data-tipo="casa-condominio" aria-pressed="false">Casas em condomínio</button>
           <button type="button" class="chip" data-tipo="sobrado" aria-pressed="false">Sobrados</button>
           <button type="button" class="chip" data-tipo="apartamento" aria-pressed="false">Apartamentos</button>
         </div>
@@ -166,7 +172,7 @@
 
       <div class="grade" id="grade">
 
-        <article class="imovel" data-cidade="santa-barbara-d-oeste"data-tipo="sobrado" data-bairro="jardim-europa" data-quartos="3">
+        <article class="imovel" data-cidade="santa-barbara-d-oeste" data-tipo="sobrado" data-bairro="jardim-europa" data-quartos="3">
           <div class="imovel__foto imovel__foto--tl ratio-45">
             <img src="assets/img/sobrado-moderno.jpg" width="960" height="805" loading="lazy" decoding="async" alt="Fachada de sobrado moderno com varanda, em imagem ilustrativa">
             <span class="selo selo--destaque">Destaque</span>
@@ -190,7 +196,7 @@
           </div>
         </article>
 
-        <article class="imovel" data-cidade="santa-barbara-d-oeste"data-tipo="casa" data-bairro="planalto-do-sol" data-quartos="4">
+        <article class="imovel" data-cidade="santa-barbara-d-oeste" data-tipo="casa" data-bairro="planalto-do-sol" data-quartos="4">
           <div class="imovel__foto imovel__foto--tr ratio-11">
             <img src="assets/img/casa-piscina.jpg" width="960" height="637" loading="lazy" decoding="async" alt="Casa moderna com piscina e área de lazer, em imagem ilustrativa">
             <span class="selo selo--demo">Ilustrativo</span>
@@ -213,14 +219,14 @@
           </div>
         </article>
 
-        <article class="imovel" data-cidade="santa-barbara-d-oeste"data-tipo="casa" data-bairro="jardim-primavera" data-quartos="3">
+        <article class="imovel" data-cidade="santa-barbara-d-oeste" data-tipo="casa-condominio" data-bairro="jardim-primavera" data-quartos="3">
           <div class="imovel__foto imovel__foto--tl ratio-45">
             <img src="assets/img/casa-condominio.jpg" width="960" height="640" loading="lazy" decoding="async" alt="Casa térrea contemporânea em condomínio fechado, em imagem ilustrativa">
             <span class="selo selo--demo">Ilustrativo</span>
           </div>
           <dl class="etiqueta">
             <div><dt>Código</dt><dd>FB-103</dd></div>
-            <div><dt>Tipo</dt><dd>Casa</dd></div>
+            <div><dt>Tipo</dt><dd>Casa em condomínio</dd></div>
             <div><dt>Bairro</dt><dd>Jardim Primavera</dd></div>
           </dl>
           <h3>Casa em condomínio com projeto contemporâneo</h3>
@@ -232,11 +238,11 @@
           </ul>
           <div class="imovel__pe">
             <p class="preco"><span>R$</span> 780.000</p>
-            <a class="btn btn--ghost btn--sm" href="#contato" data-wa="Olá, Fábio! Tenho interesse no imóvel FB-103 (Casa, Jardim Primavera)."><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>Tenho interesse</a>
+            <a class="btn btn--ghost btn--sm" href="#contato" data-wa="Olá, Fábio! Tenho interesse no imóvel FB-103 (Casa em condomínio, Jardim Primavera)."><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>Tenho interesse</a>
           </div>
         </article>
 
-        <article class="imovel" data-cidade="santa-barbara-d-oeste"data-tipo="apartamento" data-bairro="vila-linopolis" data-quartos="2">
+        <article class="imovel" data-cidade="santa-barbara-d-oeste" data-tipo="apartamento" data-bairro="vila-linopolis" data-quartos="2">
           <div class="imovel__foto imovel__foto--tr ratio-45">
             <img src="assets/img/apartamento-predio.jpg" width="960" height="1280" loading="lazy" decoding="async" alt="Prédio residencial moderno com varandas, em imagem ilustrativa">
             <span class="selo selo--demo">Ilustrativo</span>
@@ -259,7 +265,7 @@
           </div>
         </article>
 
-        <article class="imovel" data-cidade="santa-barbara-d-oeste"data-tipo="casa" data-bairro="jardim-girassol" data-quartos="3">
+        <article class="imovel" data-cidade="santa-barbara-d-oeste" data-tipo="casa" data-bairro="jardim-girassol" data-quartos="3">
           <div class="imovel__foto imovel__foto--tl ratio-11">
             <img src="assets/img/casa-terrea.jpg" width="960" height="640" loading="lazy" decoding="async" alt="Casa de bairro com jardim na frente, em imagem ilustrativa">
             <span class="selo selo--demo">Ilustrativo</span>
@@ -282,7 +288,7 @@
           </div>
         </article>
 
-        <article class="imovel" data-cidade="santa-barbara-d-oeste"data-tipo="apartamento" data-bairro="jardim-europa" data-quartos="3">
+        <article class="imovel" data-cidade="santa-barbara-d-oeste" data-tipo="apartamento" data-bairro="jardim-europa" data-quartos="3">
           <div class="imovel__foto imovel__foto--tr ratio-11">
             <img src="assets/img/apartamento-sala.jpg" width="960" height="506" loading="lazy" decoding="async" alt="Sala ampla e iluminada de apartamento, em imagem ilustrativa">
             <span class="selo selo--demo">Ilustrativo</span>
@@ -309,14 +315,14 @@
 
       <div class="vazio" id="vazio" hidden>
         <p class="vazio__t">Nenhum imóvel com esses filtros por aqui.</p>
-        <p>O Fábio pode ter algo que ainda não está no site. Conte o que você procura.</p>
+        <p>Podemos ter algo que ainda não está no site. Conte o que você procura.</p>
         <div class="vazio__acoes">
-          <a class="btn btn--primary" href="#contato" data-wa="Olá, Fábio! Não encontrei no site o imóvel que procuro. Pode me ajudar?"><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>Falar com o Fábio</a>
+          <a class="btn btn--primary" href="#contato" data-wa="Olá, Fábio! Não encontrei no site o imóvel que procuro. Pode me ajudar?"><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>Falar com a gente</a>
           <button class="btn btn--ghost" type="button" id="limpar">Limpar filtros</button>
         </div>
       </div>
 
-      <p class="demo-nota">Imóveis, fotos e valores de demonstração. Serão substituídos pelos imóveis reais do Fábio.</p>
+      <p class="demo-nota">Imóveis, fotos e valores de demonstração. Serão substituídos pelos nossos imóveis reais.</p>
     </div>
   </section>
 
@@ -325,7 +331,7 @@
     <div class="vender__in wrap">
       <div class="vender__copy" data-reveal="up">
         <h2 id="vender-titulo">Vai vender seu imóvel? Comece por uma avaliação justa.</h2>
-        <p>O Fábio avalia o seu imóvel com uma metodologia própria, que olha para três fatores:</p>
+        <p>Nós avaliamos o seu imóvel com uma metodologia própria, que olha para três fatores:</p>
         <ul class="fatores">
           <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg><span><strong>O mercado:</strong> preço por m² dos últimos 6 meses.</span></li>
           <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg><span><strong>O imóvel:</strong> estado de conservação e qualidade dos acabamentos.</span></li>
@@ -382,18 +388,18 @@
     <div class="wrap">
       <header class="como__cab" data-reveal="up">
         <h2 id="como-titulo">Do primeiro papo às chaves na mão</h2>
-        <p>Comprar ou vender um imóvel é uma decisão grande. O caminho com o Fábio é simples e você sabe onde está em cada etapa.</p>
+        <p>Comprar ou vender um imóvel é uma decisão grande. O nosso caminho é simples e você sabe onde está em cada etapa.</p>
       </header>
       <ol class="passos">
         <li class="passo passo--1" style="--i:0">
           <span class="passo__n" aria-hidden="true">1</span>
           <h3>Conversa</h3>
-          <p>Você conta o que procura, ou o que quer vender, e o Fábio entende o seu momento.</p>
+          <p>Você conta o que procura, ou o que quer vender, e nós entendemos o seu momento.</p>
         </li>
         <li class="passo passo--2" style="--i:1">
           <span class="passo__n" aria-hidden="true">2</span>
           <h3>Seleção</h3>
-          <p>Ele separa os imóveis que combinam com você, em vez de despejar uma lista sem fim.</p>
+          <p>Nós separamos os imóveis que combinam com você, em vez de despejar uma lista sem fim.</p>
         </li>
         <li class="passo passo--3" style="--i:2">
           <span class="passo__n" aria-hidden="true">3</span>
@@ -403,7 +409,7 @@
         <li class="passo passo--4" style="--i:3">
           <span class="passo__n" aria-hidden="true">4</span>
           <h3>Chaves na mão</h3>
-          <p>O Fábio acompanha a negociação e a documentação até a entrega das chaves.</p>
+          <p>Nós acompanhamos a negociação e a documentação até a entrega das chaves.</p>
         </li>
       </ol>
     </div>
@@ -425,7 +431,7 @@
         <p>Minha base de trabalho fica na Rua José Olegário, 246, no Residencial Dona Margarida, mas minha atuação vai muito além: conto com uma rede de divulgação nos principais portais, como Zap, Viva Real e ImovelWeb, além de uma equipe estratégica de <strong>mais de 60 corretores parceiros</strong> que compartilham oportunidades através de grupos especializados. Atualmente, minha carteira conta com <strong>mais de 180 imóveis</strong> cuidadosamente selecionados.</p>
         <p>Meu propósito vai além de simplesmente fechar negócios: busco oferecer uma experiência justa e transparente para ambos os lados, quem vende e quem compra. Trabalho também com avaliação de imóveis, onde desenvolvi uma metodologia de avaliação que considera três fatores essenciais: as condições atuais do mercado (com análise de preços por m² dos últimos 6 meses), as características físicas do imóvel (como estado de conservação e qualidade dos acabamentos) e as oportunidades específicas de cada região (observando tendências e vocação do bairro).</p>
         <p>Acredito que é essa abordagem detalhada e personalizada que tem me permitido construir relacionamentos duradouros e alcançar resultados consistentes para meus clientes.</p>
-        <a class="btn btn--ink" href="#contato" data-wa="Olá, Fábio! Vi seu site e gostaria de conhecer seu trabalho."><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>Conversar com o Fábio</a>
+        <a class="btn btn--ink" href="#contato" data-wa="Olá, Fábio! Vi seu site e gostaria de conhecer seu trabalho."><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>Conversar com a gente</a>
       </div>
     </div>
   </section>
@@ -435,7 +441,7 @@
     <div class="contato__in wrap">
       <div class="contato__copy" data-reveal="up">
         <h2 id="contato-titulo">Vamos conversar sobre o seu imóvel?</h2>
-        <p>Chame no WhatsApp ou deixe seus dados. O Fábio responde pessoalmente.</p>
+        <p>Chame no WhatsApp ou deixe seus dados. Nós respondemos pessoalmente.</p>
         <ul class="contato__lista">
           <li><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg><a href="#contato" data-wa="Olá, Fábio! Vi seu site e quero conversar sobre imóveis.">WhatsApp <span data-site="telefone">(19) 97421-6218</span></a></li>
           <li><svg class="i" aria-hidden="true"><use href="#i-phone"/></svg><a href="tel:+5519974216218" data-site-tel>Ligar <span data-site="telefone">(19) 97421-6218</span></a></li>
@@ -495,7 +501,7 @@
   </div>
 </footer>
 
-<a class="wa-flutuante is-oculto" id="wa-flutuante" href="#contato" data-wa="Olá, Fábio! Vi seu site e quero conversar sobre imóveis." aria-label="Falar com o Fábio no WhatsApp">
+<a class="wa-flutuante is-oculto" id="wa-flutuante" href="#contato" data-wa="Olá, Fábio! Vi seu site e quero conversar sobre imóveis." aria-label="Falar no WhatsApp">
   <svg class="i" aria-hidden="true"><use href="#i-wa"/></svg><span>Falar no WhatsApp</span>
 </a>
 

@@ -47,7 +47,7 @@ A coluna "Hoje" diz o que já é real (informado pelo Fábio) e o que ainda é *
 | Aviso "Imóveis de demonstração" e selos "Ilustrativo" | `.demo-nota` e `.selo--demo` | remover ao colocar imóveis reais |
 | `noindex` | `<meta name="robots">` em `public/index.html` | **remover** quando o site for ao ar de verdade, para o Google indexar |
 
-Para um novo imóvel, copie um bloco `<article class="imovel" …>` e ajuste `data-cidade`, `data-tipo`, `data-bairro` e `data-quartos` (a busca usa esses quatro campos), a foto e os textos.
+Para um novo imóvel, copie um bloco `<article class="imovel" …>` e ajuste `data-cidade`, `data-tipo` (casa, casa-condominio, sobrado, apartamento, terreno, chacara, sitio ou comercial), `data-bairro` e `data-quartos` (a busca usa esses quatro campos), a foto e os textos.
 
 ## Publicação
 
