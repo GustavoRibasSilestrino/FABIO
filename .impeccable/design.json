@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-12T00:00:00Z",
+  "title": "Design System: Fábio, Corretor de Imóveis",
+  "extensions": {
+    "colorMeta": {
+      "jardim": { "role": "primary", "displayName": "Jardim Green", "canonical": "#0d5c41", "tonalRamp": ["#04180f", "#062b1e", "#083d2b", "#0d5c41", "#2f8264", "#6aa990", "#a8cfbd", "#dcefe5"] },
+      "jardim-fundo": { "role": "primary", "displayName": "Jardim Fundo", "canonical": "#083d2b", "tonalRamp": ["#020d08", "#04170f", "#062a1e", "#083d2b", "#1f5d46", "#4f8b73", "#94bfad", "#d3e8de"] },
+      "acafrao": { "role": "primary", "displayName": "Saffron", "canonical": "#f5b301", "tonalRamp": ["#3d2d00", "#6b5000", "#9a7400", "#c99300", "#f5b301", "#ffc933", "#ffe08a", "#fff3cc"] },
+      "cobalto": { "role": "secondary", "displayName": "Cobalt", "canonical": "#2d4bd6", "tonalRamp": ["#0a1347", "#122379", "#1b36ab", "#2d4bd6", "#5d76e6", "#8d9fee", "#bcc7f6", "#e3e8fc"] },
+      "concreto": { "role": "neutral", "displayName": "Concreto", "canonical": "#e4e9e1", "tonalRamp": ["#1d231c", "#3a4438", "#586653", "#7d8c78", "#a3b09f", "#c3cdc0", "#e4e9e1", "#f1f4ee"] },
+      "tinta": { "role": "neutral", "displayName": "Ink", "canonical": "#10241c", "tonalRamp": ["#050c09", "#10241c", "#1f3a2f", "#3b4f44", "#5d6f64", "#8a9990", "#b9c4bd", "#e1e7e3"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero H1 only, Bricolage Grotesque 800." },
+      "headline": { "displayName": "Headline", "purpose": "Section H2s." },
+      "title": { "displayName": "Title", "purpose": "Listing names, step titles, empty state." },
+      "price": { "displayName": "Price", "purpose": "The single number on a listing card, tabular numerals." },
+      "body": { "displayName": "Body", "purpose": "Hanken Grotesk paragraphs." },
+      "label": { "displayName": "Label", "purpose": "Label-grid headings, field labels, seals, chips." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "ease", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "The only easing: arch rise, reveals, hover morphs, button state changes." },
+      { "name": "arch-rise", "value": "1.3s, delays 0.1s / 0.26s / 0.42s", "purpose": "Hero arches rise from the ground line in sequence at load." },
+      { "name": "corner-morph", "value": "border-radius 0.7s; image scale 1.05 over 1s", "purpose": "Listing photo's large corner grows 1.6x on pointer hover." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "nav", "value": "900px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Saffron pill for every WhatsApp action.",
+      "html": "<a class=\"ds-btn ds-btn-primary\" href=\"#\">Falar no WhatsApp</a>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 1.6rem; border: 2px solid transparent; border-radius: 999px; font: 700 1rem/1.1 'Hanken Grotesk', system-ui, sans-serif; text-decoration: none; cursor: pointer; transition: background-color .25s cubic-bezier(.16,1,.3,1), color .25s cubic-bezier(.16,1,.3,1), transform .25s cubic-bezier(.16,1,.3,1); } .ds-btn:active { transform: scale(.97); } .ds-btn:focus-visible { outline: 3px solid #2d4bd6; outline-offset: 3px; } .ds-btn-primary { background: #f5b301; color: #10241c; } .ds-btn-primary:hover { background: #ffc933; }"
+    },
+    {
+      "name": "Ink Button",
+      "kind": "button",
+      "refersTo": "button-ink",
+      "description": "Ink pill for search and form submission.",
+      "html": "<button class=\"ds-btn ds-btn-ink\">Buscar imóveis</button>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 1.6rem; border: 2px solid transparent; border-radius: 999px; font: 700 1rem/1.1 'Hanken Grotesk', system-ui, sans-serif; cursor: pointer; transition: background-color .25s cubic-bezier(.16,1,.3,1); } .ds-btn:focus-visible { outline: 3px solid #2d4bd6; outline-offset: 3px; } .ds-btn-ink { background: #10241c; color: #f1f4ee; } .ds-btn-ink:hover { background: #0d5c41; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Outlined pill for per-listing interest.",
+      "html": "<a class=\"ds-btn-ghost\" href=\"#\">Tenho interesse</a>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1.15rem; border: 2px solid #10241c; border-radius: 999px; background: transparent; color: #10241c; font: 700 .9375rem/1.1 'Hanken Grotesk', system-ui, sans-serif; text-decoration: none; transition: background-color .25s cubic-bezier(.16,1,.3,1), color .25s cubic-bezier(.16,1,.3,1); } .ds-btn-ghost:hover { background: #10241c; color: #f1f4ee; } .ds-btn-ghost:focus-visible { outline: 3px solid #2d4bd6; outline-offset: 3px; }"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Property type filter; selected state fills ink.",
+      "html": "<button class=\"ds-chip\" aria-pressed=\"false\">Casas</button> <button class=\"ds-chip\" aria-pressed=\"true\">Todos</button>",
+      "css": ".ds-chip { min-height: 44px; padding: 0 20px; border: 2px solid #10241c; border-radius: 999px; background: transparent; color: #10241c; font: 700 .9375rem 'Hanken Grotesk', system-ui, sans-serif; cursor: pointer; transition: background-color .25s cubic-bezier(.16,1,.3,1), color .25s cubic-bezier(.16,1,.3,1); } .ds-chip:hover { background: rgba(16,36,28,.08); } .ds-chip[aria-pressed='true'] { background: #10241c; color: #f1f4ee; } .ds-chip:focus-visible { outline: 3px solid #2d4bd6; outline-offset: 3px; }"
+    },
+    {
+      "name": "Search Panel Field",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "Labeled select with a 2px ink border and 12px radius.",
+      "html": "<div class=\"ds-field\"><label for=\"ds-t\">Tipo</label><select id=\"ds-t\"><option>Todos</option><option>Casa</option></select></div>",
+      "css": ".ds-field { padding: 18px 20px; background: #f1f4ee; border-radius: 6px 36px 6px 6px; } .ds-field label { display: block; margin-bottom: 6px; font: 700 .8125rem 'Hanken Grotesk', system-ui, sans-serif; color: #3b4f44; } .ds-field select { width: 100%; min-height: 48px; padding: 0 12px; border: 2px solid #10241c; border-radius: 12px; background: #fff; color: #10241c; font: 600 1rem 'Hanken Grotesk', system-ui, sans-serif; } .ds-field select:focus-visible { outline: 3px solid #2d4bd6; outline-offset: 3px; }"
+    },
+    {
+      "name": "Top Navigation",
+      "kind": "nav",
+      "refersTo": "button-primary",
+      "description": "Jardim Green bar, white links with a saffron underline that scales in on hover.",
+      "html": "<nav class=\"ds-nav\"><strong>Fábio</strong><a href=\"#\">Imóveis</a><a href=\"#\">Vender</a><a href=\"#\">Contato</a></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: 28px; min-height: 72px; padding: 0 24px; background: #0d5c41; color: #fff; font-family: 'Hanken Grotesk', system-ui, sans-serif; } .ds-nav strong { margin-right: auto; font: 700 1.5rem/1 'Bricolage Grotesque', 'Arial Narrow', sans-serif; letter-spacing: -.03em; } .ds-nav a { position: relative; padding: 10px 0; color: inherit; font-weight: 600; text-decoration: none; } .ds-nav a::after { content: ''; position: absolute; left: 0; right: 0; bottom: 4px; height: 2px; background: #f5b301; transform: scaleX(0); transform-origin: left; transition: transform .35s cubic-bezier(.16,1,.3,1); } .ds-nav a:hover::after { transform: scaleX(1); } .ds-nav a:focus-visible { outline: 3px solid #f5b301; outline-offset: 3px; }"
+    },
+    {
+      "name": "Label Grid",
+      "kind": "custom",
+      "refersTo": "listing-photo",
+      "description": "Signature three-cell Código / Tipo / Bairro grid between ink rules, on every listing.",
+      "html": "<dl class=\"ds-etiqueta\"><div><dt>Código</dt><dd>FB-101</dd></div><div><dt>Tipo</dt><dd>Sobrado</dd></div><div><dt>Bairro</dt><dd>Jardim Europa</dd></div></dl>",
+      "css": ".ds-etiqueta { display: grid; grid-template-columns: auto auto minmax(0,1fr); margin: 0; border-block: 1.5px solid #10241c; font-family: 'Hanken Grotesk', system-ui, sans-serif; color: #10241c; } .ds-etiqueta > div { padding: 9px 14px 9px 0; } .ds-etiqueta > div + div { padding-left: 14px; border-left: 1.5px solid #10241c; } .ds-etiqueta dt { margin-bottom: 4px; font-size: .75rem; font-weight: 700; line-height: 1; color: #3b4f44; } .ds-etiqueta dd { margin: 0; font-size: .9375rem; font-weight: 700; line-height: 1.2; }"
+    },
+    {
+      "name": "Arch and Corner Photo",
+      "kind": "card",
+      "refersTo": "listing-photo",
+      "description": "Photo placeholder with one large quarter-circle corner and a saffron seal.",
+      "html": "<div class=\"ds-foto\"><span class=\"ds-selo\">Destaque</span></div>",
+      "css": ".ds-foto { position: relative; width: 240px; aspect-ratio: 4/5; background: #083d2b; border-radius: 132px 4px 4px 4px; overflow: hidden; transition: border-radius .7s cubic-bezier(.16,1,.3,1); } .ds-foto:hover { border-top-left-radius: 200px; } .ds-selo { position: absolute; right: 14px; top: 14px; padding: 6px 12px; border-radius: 999px; background: #f5b301; color: #10241c; font: 700 .75rem/1.2 'Hanken Grotesk', system-ui, sans-serif; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Modernist House in Flat Colour",
+    "overview": "The site is one house drawn the way Brazilian modernism drew it: whole regions owned by a single saturated colour, arches standing on a concrete ground line, and a single quarter-circle swung out of an otherwise square photograph. Burle Marx colour fields, Niemeyer curves. Depth is stacking, never lighting: one flat shape overlaps another and that is the whole illusion.\n\nDensity is generous and mobile-first. Sections alternate whole colour fields (jardim green, cobalt, concrete, deep green) rather than sharing a neutral page with cards on it. The voice is direct and local, and the interface is built so that one saffron button, WhatsApp, is always the loudest thing within reach.",
+    "keyCharacteristics": [
+      "Every section owns one flat colour field; no gradient, glass or blur anywhere in the build.",
+      "Arches (fully rounded top, square base) and a single large quarter-circle corner are the only large-scale shapes.",
+      "Every listing carries the same three-cell label grid (Código, Tipo, Bairro) between ink rules.",
+      "Saffron is spent on actions, the logo mark and one sun; nothing else.",
+      "Photos are placeholder stock, marked \"Ilustrativo\" on each card."
+    ],
+    "rules": [
+      { "name": "The Flat Field Rule", "body": "A region is one solid colour. Depth comes from overlapping shapes and adjacent fields, never from shadow, gradient, glass or blur.", "section": "colors" },
+      { "name": "The Saffron Scarcity Rule", "body": "Saffron marks the action, the mark and the sun. It is never a background for a whole section and never decoration for its own sake.", "section": "colors" },
+      { "name": "The Paired Text Rule", "body": "Light fields take Ink and Ink Soft; green fields take white and Menta; cobalt takes white and Azul Claro. Do not cross the pairs.", "section": "colors" },
+      { "name": "The Sentence Case Rule", "body": "Labels, chips and buttons are sentence case at normal tracking. Small caps-style uppercase labels are not part of this system.", "section": "typography" },
+      { "name": "The Tight Display Rule", "body": "Bricolage headings run -0.02em to -0.035em tracking and balanced wrapping; body text never does.", "section": "typography" },
+      { "name": "The Layered Colour Rule", "body": "To raise something, put a different flat colour behind or in front of it. Never add a shadow.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do give each section a whole flat colour field and keep text on its paired colour set.",
+      "Do cut photos with exactly one large quarter-circle corner (or a full arch) and 4px on the rest.",
+      "Do keep the saffron pill as the single dominant action on any screen.",
+      "Do rule every listing with the same Código / Tipo / Bairro label grid.",
+      "Do keep tap targets at 44px or more and set focus rings by field colour."
+    ],
+    "donts": [
+      "Don't add shadows, gradients, glass or blur; layer flat colour instead.",
+      "Don't use saffron as a section background or for ornament.",
+      "Don't round every corner of a photo; one big curve per piece.",
+      "Don't fall back to the real-estate default of navy and gold with a stock hero photo and a bolted-on search bar.",
+      "Don't set uppercase tracked kickers or eyebrows above headings; the build has none."
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+node_modules/
+.vercel/
+.DS_Store
+Thumbs.db
+
+# Arquivos de trabalho locais das ferramentas de design
+.impeccable/hook.cache.json
+.impeccable/questions/
+.impeccable/review/
+.impeccable/live/
+.claude/

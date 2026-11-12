@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "public/index.html"
+        ],
+        "createdAt": "2026-11-12T13:24:02.546Z",
+        "reason": "assistant triage, not user confirmed: measured in a real browser at 1440px: .wrap insets 73px each side, section padding 128px/112px, .passo 34px, .vazio 36px/40px; the detector parser does not resolve clamp()/min()/var(). Hero and vender arches are intentionally flush with the section foot (ground line); their text columns are inset."
+      }
+    ]
+  }
+}
