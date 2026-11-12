@@ -182,170 +182,22 @@
           <h2 id="imoveis-titulo">Imóveis em destaque</h2>
           <p class="sec__sub">Casas, sobrados e apartamentos para quem quer sair do aluguel ou trocar de endereço.</p>
         </div>
-        <div class="filtro" role="group" aria-label="Filtrar por tipo">
-          <button type="button" class="chip" data-tipo="" aria-pressed="true">Todos</button>
-          <button type="button" class="chip" data-tipo="casa" aria-pressed="false">Casas</button>
-          <button type="button" class="chip" data-tipo="casa-condominio" aria-pressed="false">Casas em condomínio</button>
-          <button type="button" class="chip" data-tipo="sobrado" aria-pressed="false">Sobrados</button>
-          <button type="button" class="chip" data-tipo="apartamento" aria-pressed="false">Apartamentos</button>
-        </div>
+        <div class="filtro" role="group" aria-label="Filtrar por tipo" hidden></div>
       </header>
 
-      <p class="resultado" id="resultado" tabindex="-1" aria-live="polite">6 imóveis</p>
+      <p class="resultado" id="resultado" tabindex="-1" aria-live="polite">Carregando imóveis…</p>
 
-      <div class="grade" id="grade">
-
-        <article class="imovel" data-cidade="santa-barbara-d-oeste" data-tipo="sobrado" data-bairro="jardim-europa" data-quartos="3">
-          <div class="imovel__foto imovel__foto--tl ratio-45">
-            <img src="assets/img/sobrado-moderno.jpg" width="960" height="805" loading="lazy" decoding="async" alt="Fachada de sobrado moderno com varanda, em imagem ilustrativa">
-            <span class="selo selo--destaque">Destaque</span>
-            <span class="selo selo--demo">Ilustrativo</span>
-          </div>
-          <dl class="etiqueta">
-            <div><dt>Código</dt><dd>FB-101</dd></div>
-            <div><dt>Tipo</dt><dd>Sobrado</dd></div>
-            <div><dt>Bairro</dt><dd>Jardim Europa</dd></div>
-          </dl>
-          <h3>Sobrado moderno com varanda e quintal</h3>
-          <ul class="specs">
-            <li><svg class="i" aria-hidden="true"><use href="#i-bed"/></svg>3 quartos</li>
-            <li><svg class="i" aria-hidden="true"><use href="#i-bath"/></svg>3 banheiros</li>
-            <li><svg class="i" aria-hidden="true"><use href="#i-car"/></svg>2 vagas</li>
-            <li><svg class="i" aria-hidden="true"><use href="#i-area"/></svg>180 m²</li>
-          </ul>
-          <div class="imovel__pe">
-            <p class="preco"><span>R$</span> 690.000</p>
-            <a class="btn btn--ghost btn--sm" href="#contato" data-wa="Olá, Fábio! Tenho interesse no imóvel FB-101 (Sobrado, Jardim Europa)."><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>Tenho interesse</a>
-          </div>
-        </article>
-
-        <article class="imovel" data-cidade="santa-barbara-d-oeste" data-tipo="casa" data-bairro="planalto-do-sol" data-quartos="4">
-          <div class="imovel__foto imovel__foto--tr ratio-11">
-            <img src="assets/img/casa-piscina.jpg" width="960" height="637" loading="lazy" decoding="async" alt="Casa moderna com piscina e área de lazer, em imagem ilustrativa">
-            <span class="selo selo--demo">Ilustrativo</span>
-          </div>
-          <dl class="etiqueta">
-            <div><dt>Código</dt><dd>FB-102</dd></div>
-            <div><dt>Tipo</dt><dd>Casa</dd></div>
-            <div><dt>Bairro</dt><dd>Planalto do Sol</dd></div>
-          </dl>
-          <h3>Casa com piscina e área de lazer completa</h3>
-          <ul class="specs">
-            <li><svg class="i" aria-hidden="true"><use href="#i-bed"/></svg>4 quartos</li>
-            <li><svg class="i" aria-hidden="true"><use href="#i-bath"/></svg>5 banheiros</li>
-            <li><svg class="i" aria-hidden="true"><use href="#i-car"/></svg>4 vagas</li>
-            <li><svg class="i" aria-hidden="true"><use href="#i-area"/></svg>320 m²</li>
-          </ul>
-          <div class="imovel__pe">
-            <p class="preco"><span>R$</span> 1.150.000</p>
-            <a class="btn btn--ghost btn--sm" href="#contato" data-wa="Olá, Fábio! Tenho interesse no imóvel FB-102 (Casa, Planalto do Sol)."><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>Tenho interesse</a>
-          </div>
-        </article>
-
-        <article class="imovel" data-cidade="santa-barbara-d-oeste" data-tipo="casa-condominio" data-bairro="jardim-primavera" data-quartos="3">
-          <div class="imovel__foto imovel__foto--tl ratio-45">
-            <img src="assets/img/casa-condominio.jpg" width="960" height="640" loading="lazy" decoding="async" alt="Casa térrea contemporânea em condomínio fechado, em imagem ilustrativa">
-            <span class="selo selo--demo">Ilustrativo</span>
-          </div>
-          <dl class="etiqueta">
-            <div><dt>Código</dt><dd>FB-103</dd></div>
-            <div><dt>Tipo</dt><dd>Casa em condomínio</dd></div>
-            <div><dt>Bairro</dt><dd>Jardim Primavera</dd></div>
-          </dl>
-          <h3>Casa em condomínio com projeto contemporâneo</h3>
-          <ul class="specs">
-            <li><svg class="i" aria-hidden="true"><use href="#i-bed"/></svg>3 quartos</li>
-            <li><svg class="i" aria-hidden="true"><use href="#i-bath"/></svg>3 banheiros</li>
-            <li><svg class="i" aria-hidden="true"><use href="#i-car"/></svg>2 vagas</li>
-            <li><svg class="i" aria-hidden="true"><use href="#i-area"/></svg>210 m²</li>
-          </ul>
-          <div class="imovel__pe">
-            <p class="preco"><span>R$</span> 780.000</p>
-            <a class="btn btn--ghost btn--sm" href="#contato" data-wa="Olá, Fábio! Tenho interesse no imóvel FB-103 (Casa em condomínio, Jardim Primavera)."><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>Tenho interesse</a>
-          </div>
-        </article>
-
-        <article class="imovel" data-cidade="santa-barbara-d-oeste" data-tipo="apartamento" data-bairro="vila-linopolis" data-quartos="2">
-          <div class="imovel__foto imovel__foto--tr ratio-45">
-            <img src="assets/img/apartamento-predio.jpg" width="960" height="1280" loading="lazy" decoding="async" alt="Prédio residencial moderno com varandas, em imagem ilustrativa">
-            <span class="selo selo--demo">Ilustrativo</span>
-          </div>
-          <dl class="etiqueta">
-            <div><dt>Código</dt><dd>FB-104</dd></div>
-            <div><dt>Tipo</dt><dd>Apartamento</dd></div>
-            <div><dt>Bairro</dt><dd>Vila Linópolis</dd></div>
-          </dl>
-          <h3>Apartamento com varanda perto de tudo</h3>
-          <ul class="specs">
-            <li><svg class="i" aria-hidden="true"><use href="#i-bed"/></svg>2 quartos</li>
-            <li><svg class="i" aria-hidden="true"><use href="#i-bath"/></svg>2 banheiros</li>
-            <li><svg class="i" aria-hidden="true"><use href="#i-car"/></svg>1 vaga</li>
-            <li><svg class="i" aria-hidden="true"><use href="#i-area"/></svg>68 m²</li>
-          </ul>
-          <div class="imovel__pe">
-            <p class="preco"><span>R$</span> 320.000</p>
-            <a class="btn btn--ghost btn--sm" href="#contato" data-wa="Olá, Fábio! Tenho interesse no imóvel FB-104 (Apartamento, Vila Linópolis)."><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>Tenho interesse</a>
-          </div>
-        </article>
-
-        <article class="imovel" data-cidade="santa-barbara-d-oeste" data-tipo="casa" data-bairro="jardim-girassol" data-quartos="3">
-          <div class="imovel__foto imovel__foto--tl ratio-11">
-            <img src="assets/img/casa-terrea.jpg" width="960" height="640" loading="lazy" decoding="async" alt="Casa de bairro com jardim na frente, em imagem ilustrativa">
-            <span class="selo selo--demo">Ilustrativo</span>
-          </div>
-          <dl class="etiqueta">
-            <div><dt>Código</dt><dd>FB-105</dd></div>
-            <div><dt>Tipo</dt><dd>Casa</dd></div>
-            <div><dt>Bairro</dt><dd>Jardim Girassol</dd></div>
-          </dl>
-          <h3>Casa com quintal para a família crescer</h3>
-          <ul class="specs">
-            <li><svg class="i" aria-hidden="true"><use href="#i-bed"/></svg>3 quartos</li>
-            <li><svg class="i" aria-hidden="true"><use href="#i-bath"/></svg>2 banheiros</li>
-            <li><svg class="i" aria-hidden="true"><use href="#i-car"/></svg>2 vagas</li>
-            <li><svg class="i" aria-hidden="true"><use href="#i-area"/></svg>150 m²</li>
-          </ul>
-          <div class="imovel__pe">
-            <p class="preco"><span>R$</span> 485.000</p>
-            <a class="btn btn--ghost btn--sm" href="#contato" data-wa="Olá, Fábio! Tenho interesse no imóvel FB-105 (Casa, Jardim Girassol)."><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>Tenho interesse</a>
-          </div>
-        </article>
-
-        <article class="imovel" data-cidade="santa-barbara-d-oeste" data-tipo="apartamento" data-bairro="jardim-europa" data-quartos="3">
-          <div class="imovel__foto imovel__foto--tr ratio-11">
-            <img src="assets/img/apartamento-sala.jpg" width="960" height="506" loading="lazy" decoding="async" alt="Sala ampla e iluminada de apartamento, em imagem ilustrativa">
-            <span class="selo selo--demo">Ilustrativo</span>
-          </div>
-          <dl class="etiqueta">
-            <div><dt>Código</dt><dd>FB-106</dd></div>
-            <div><dt>Tipo</dt><dd>Apartamento</dd></div>
-            <div><dt>Bairro</dt><dd>Jardim Europa</dd></div>
-          </dl>
-          <h3>Apartamento de 3 quartos com sala ampla</h3>
-          <ul class="specs">
-            <li><svg class="i" aria-hidden="true"><use href="#i-bed"/></svg>3 quartos</li>
-            <li><svg class="i" aria-hidden="true"><use href="#i-bath"/></svg>3 banheiros</li>
-            <li><svg class="i" aria-hidden="true"><use href="#i-car"/></svg>2 vagas</li>
-            <li><svg class="i" aria-hidden="true"><use href="#i-area"/></svg>110 m²</li>
-          </ul>
-          <div class="imovel__pe">
-            <p class="preco"><span>R$</span> 520.000</p>
-            <a class="btn btn--ghost btn--sm" href="#contato" data-wa="Olá, Fábio! Tenho interesse no imóvel FB-106 (Apartamento, Jardim Europa)."><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>Tenho interesse</a>
-          </div>
-        </article>
-
-      </div>
+      <div class="grade" id="grade" data-carregando="1"></div>
 
       <div class="vazio" id="vazio" hidden>
-        <p class="vazio__t">Nenhum imóvel com esses filtros por aqui.</p>
-        <p>Podemos ter algo que ainda não está no site. Conte o que você procura.</p>
+        <p class="vazio__t" id="vazio-t">Nenhum imóvel com esses filtros por aqui.</p>
+        <p id="vazio-p">Podemos ter algo que ainda não está no site. Conte o que você procura.</p>
         <div class="vazio__acoes">
           <a class="btn btn--primary" href="#contato" data-wa="Olá, Fábio! Não encontrei no site o imóvel que procuro. Pode me ajudar?"><svg class="i" aria-hidden="true"><use href="#i-wa"/></svg>Falar com a gente</a>
           <button class="btn btn--ghost" type="button" id="limpar">Limpar filtros</button>
         </div>
       </div>
 
-      <p class="demo-nota">Imóveis, fotos e valores de demonstração. Serão substituídos pelos nossos imóveis reais.</p>
     </div>
   </section>
 

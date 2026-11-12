@@ -1,11 +1,12 @@
 /* Imóveis do site: lê do Supabase (cadastrados pelo painel /admin), monta os cartões
-   e a galeria de fotos. Sem a chave em js/config.js, os imóveis de exemplo do HTML continuam. */
+   e a galeria de fotos. Sem a chave em js/config.js, ou se o Supabase não responder, o site avisa
+   e oferece o WhatsApp. Sem nenhum imóvel cadastrado, mostra o aviso de lista vazia. */
 (() => {
   'use strict';
 
   const F = window.FABIO;
   const grade = document.getElementById('grade');
-  if (!F || !F.ativo || !grade) return;
+  if (!grade) return;
 
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const CAMPOS = 'id,codigo,titulo,tipo,cidade,bairro,quartos,banheiros,vagas,area_terreno,area_construida,preco,descricao,fotos,destaque,status';
@@ -211,21 +212,20 @@
 
   /* ---------- carregamento ---------- */
   const avisa = () => document.dispatchEvent(new CustomEvent('imoveis:atualizados'));
-  const tiraNotaDeDemonstracao = () => document.querySelectorAll('.demo-nota').forEach(el => el.remove());
 
   const mostra = lista => {
     porId.clear();
     lista.forEach(im => porId.set(im.id, im));
     grade.replaceChildren(...lista.map(cartao));
-    tiraNotaDeDemonstracao();
+    delete grade.dataset.carregando;
     montaFiltros(lista);
     avisa();
   };
 
   const falha = () => {
     grade.replaceChildren();
+    delete grade.dataset.carregando;
     grade.dataset.erro = '1';
-    tiraNotaDeDemonstracao();
     grade.after(h('div', { class: 'vazio', id: 'erro-carga' },
       h('p', { class: 'vazio__t', text: 'Não conseguimos carregar os imóveis agora.' }),
       h('p', { text: 'Chame a gente no WhatsApp e mostramos o que temos disponível.' }),
@@ -249,10 +249,11 @@
       catch (e) { if (tentativa === 0) await new Promise(ok => setTimeout(ok, 1500)); }
     }
     if (!lista) { falha(); return; }
-    if (lista.length) mostra(lista); // sem nenhum imóvel cadastrado, os exemplos do HTML continuam
+    mostra(lista); // lista vazia também: main.js mostra o aviso "estamos atualizando"
   };
 
   // espera main.js (que também é "defer") para que os botões de WhatsApp sejam preenchidos
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', carrega);
-  else carrega();
+  const inicia = F && F.ativo ? carrega : falha; // sem chave do Supabase em js/config.js, cai no aviso de falha
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', inicia);
+  else inicia();
 })();

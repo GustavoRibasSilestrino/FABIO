@@ -27,7 +27,7 @@ public/
   js/imoveis.js     lê os imóveis do Supabase, monta os cartões e a galeria de fotos
   js/admin.js       login, cadastro de imóveis e envio de fotos
   js/vendor/        supabase-js (biblioteca, copiada para cá; licença MIT)
-  assets/img/       fotos (hoje, imagens ilustrativas do Unsplash)
+  assets/img/       fotos do topo e dos ambientes (hoje, imagens ilustrativas do Unsplash); as fotos dos imóveis ficam no Supabase
   assets/fonts/     Bricolage Grotesque e Hanken Grotesk (hospedadas aqui)
 supabase/schema.sql tabelas, regras de segurança e pasta de fotos do banco (rodar no SQL Editor)
 supabase/migracoes/ ajustes do banco feitos depois (cada arquivo roda uma vez no SQL Editor)
@@ -38,7 +38,7 @@ DESIGN.md           sistema visual (cores, tipografia, componentes)
 
 ## Dados reais e o que ainda é ilustrativo
 
-A coluna "Hoje" diz o que já é real (informado pelo Fábio) e o que ainda é **ilustrativo** e precisa ser trocado: as fotos do Unsplash, os 6 imóveis de exemplo e os textos provisórios.
+A coluna "Hoje" diz o que já é real (informado pelo Fábio) e o que ainda é **ilustrativo** e precisa ser trocado: as fotos do topo e dos ambientes (Unsplash) e os textos provisórios.
 
 | O quê | Onde | Hoje |
 | --- | --- | --- |
@@ -48,16 +48,15 @@ A coluna "Hoje" diz o que já é real (informado pelo Fábio) e o que ainda é *
 | Nome e logotipo | `.marca` e rodapé em `public/index.html`; `public/assets/img/logo-fabio-ribas.webp`; ícones `public/assets/favicon-32.png`, `icon-192.png`, `apple-touch-icon.png` | "Fábio Ribas" e logotipo reais (enviados pelo Fábio) |
 | Endereço | seção `#contato` e rodapé em `public/index.html` | Rua José Olegário, 246, Residencial Dona Margarida (real) |
 | Texto "Sobre", números (8 anos, 200 negociações, 180 imóveis, 60 parceiros) e método de avaliação | seções `#sobre` e `#vender` em `public/index.html` | texto e números informados pelo Fábio (reais) |
-| Fotos do topo, dos imóveis e dos ambientes | `public/assets/img/` (mantenha os nomes ou ajuste os `src` no HTML) | Unsplash |
+| Fotos do topo e dos ambientes | `public/assets/img/` (mantenha os nomes ou ajuste os `src` no HTML) | Unsplash (ilustrativas) |
 | Foto do Fábio | seção `#sobre` em `public/index.html` e `public/assets/img/fabio-ribas.jpg` | foto real (enviada pelo Fábio) |
-| Imóveis (código, bairro, quartos, preço, fotos, texto) | cadastrados pelo painel `/admin` (veja abaixo). Os 6 cartões `.imovel` de `public/index.html` são só de exemplo | exemplos aparecem enquanto não houver nenhum imóvel real cadastrado; no primeiro imóvel real eles somem sozinhos (e dá para apagá-los do HTML) |
+| Imóveis (código, bairro, quartos, preço, fotos, texto) | cadastrados pelo painel `/admin` (veja abaixo); o HTML não guarda nenhum imóvel | reais (FB-103 e FB-104 até agora) |
 | Cidades e bairros da busca | Mesmo fluxo do site Menso: cidade → bairro → tipo → quartos. `<select id="f-cidade">` (3 cidades) em `public/index.html`; ao escolher a cidade, o campo Bairro (`<select id="f-bairro">`) lista só os bairros daquela cidade que têm imóvel cadastrado e disponível (não vendido), de qualquer tipo, montados em `public/js/main.js` a partir dos cartões. Não existe "todos os bairros": com bairros na cidade, é preciso escolher um; tipo ("Todos os tipos") e quartos ("Qualquer") são opcionais. Cidade sem imóvel: o campo diz "Sem imóveis cadastrados nesta cidade ainda" e a busca mostra o aviso com o botão de WhatsApp. A lista completa de bairros (`public/js/bairros.js`) é só do painel | cidades informadas pelo Fábio; lista do painel da base de CEPs dos Correios (195 em Santa Bárbara d’Oeste, 259 em Americana, 91 em Nova Odessa), sem os códigos de zoneamento |
 | Busca por código | linha "Código" no painel de busca do topo (`#busca-codigo`, `#f-codigo`), tratada em `public/js/main.js`; aceita "FB-101", "fb101" ou só "101" | funciona com o código de cada imóvel (gerado como FB-101, FB-102… ou escolhido no painel) |
 | Textos de apresentação, "como funciona" e promessas | `public/index.html` | texto provisório, confirmar com o Fábio |
 | Redes sociais | links no topo (ao lado do botão de WhatsApp), no contato e no rodapé de `public/index.html` (`#i-instagram`, `#i-facebook`) | Instagram `fabioribas.corretordeimoveis` e Facebook `FabioRibasMaciel` (reais) |
 | Depoimentos reais | ainda não existem na página | a adicionar |
-| Aviso "Imóveis de demonstração" e selos "Ilustrativo" | `.demo-nota` e `.selo--demo` | remover ao colocar imóveis reais |
-| Indexação no Google | `public/index.html` | `noindex` removido em 12/11/2026 (decisão do Gustavo), com `canonical` e `og:url` apontando para `https://fabioribasimoveis.com.br/`. O conteúdo ainda tem imóveis e fotos de exemplo |
+| Indexação no Google | `public/index.html` | `noindex` removido em 12/11/2026 (decisão do Gustavo), com `canonical` e `og:url` apontando para `https://fabioribasimoveis.com.br/`. Os imóveis são reais; as fotos do topo e dos ambientes ainda são ilustrativas |
 | Domínio | Vercel (projeto `fabio-imoveis`) e DNS no Registro.br; `vercel.json` redireciona `www` para o domínio principal | `fabioribasimoveis.com.br` |
 
 ## Painel de imóveis (`/admin`)
@@ -68,10 +67,8 @@ O Fábio entra em `https://fabioribasimoveis.com.br/admin` com e-mail e senha e 
 - **Quem pode editar:** só os e-mails da tabela `public.admins`. Para liberar outra pessoa, crie o usuário em Authentication > Users e rode `insert into public.admins (email) values ('email@dela.com');`. O cadastro público de usuários fica desligado.
 - **Ligação:** `public/js/config.js` tem o endereço do projeto e a chave **pública** (`sb_publishable_…` ou `anon`). Nunca coloque ali a chave `secret` ou `service_role`.
 - **Fotos:** o painel reduz cada foto no navegador e guarda duas versões, a grande (até 1800 px, galeria) e a média (até 900 px, cartões).
-- **Se a chave ainda não estiver preenchida:** o site mostra os exemplos do HTML e o painel avisa que não está conectado.
-- **Se o Supabase não responder** (por exemplo, projeto gratuito pausado por falta de uso): o site mostra "Não conseguimos carregar os imóveis agora" com o botão de WhatsApp. Para voltar, abra o projeto no painel do Supabase e use **Restore project**.
+- **Se a chave ainda não estiver preenchida** ou o Supabase não responder (por exemplo, projeto gratuito pausado por falta de uso): o site mostra "Não conseguimos carregar os imóveis agora" com o botão de WhatsApp, e o painel avisa que não está conectado. Para voltar, abra o projeto no painel do Supabase e use **Restore project**.
 - **Senha esquecida:** o link "Esqueci minha senha" do painel envia um e-mail de recuperação. Os endereços `https://fabioribasimoveis.com.br/admin` e `https://fabio-imoveis.vercel.app/admin` precisam estar em Authentication > URL Configuration > Redirect URLs.
-
 - **Bairro:** no cadastro, o bairro é escolhido numa lista com todos os bairros da cidade. Se faltar, "Não encontrou o bairro? Incluir outro" aceita o nome; ele entra na lista do painel daquela cidade e passa a aparecer na busca do site. A busca do site mostra só os bairros dos imóveis cadastrados; escolher o bairro certo no cadastro é o que o faz aparecer lá.
 - **Metragens:** casa, casa em condomínio, sobrado, chácara, sítio e imóvel comercial têm "área do terreno" e "área construída"; apartamento tem só a "área do apartamento"; terreno tem só a "área do terreno". O painel mostra só os campos do tipo escolhido (regra em `AREAS`, `public/js/comum.js`). No banco são as colunas `area_terreno` e `area_construida` (`supabase/migracoes/2026-11-12-metragens.sql`).
 - **Código:** o painel gera FB-101, FB-102… Se preferir, o Fábio pode digitar o próprio código (letras, números e hífen, até 20 caracteres; não pode repetir). É o que o cliente usa em "Buscar código".

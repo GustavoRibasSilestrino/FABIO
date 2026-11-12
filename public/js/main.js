@@ -134,9 +134,16 @@
       }
     });
     const erro = grade.dataset.erro === '1';
-    resultado.textContent = shown === 1 ? '1 imóvel' : `${shown} imóveis`;
+    const carregando = grade.dataset.carregando === '1';
+    const nenhum = cards.length === 0; // nenhum imóvel cadastrado (e não só filtros sem resultado)
+    resultado.textContent = carregando ? 'Carregando imóveis…' : (shown === 1 ? '1 imóvel' : `${shown} imóveis`);
     resultado.hidden = erro;
-    vazio.hidden = shown !== 0 || erro;
+    vazio.hidden = shown !== 0 || erro || carregando;
+    $('#vazio-t').textContent = nenhum ? 'Estamos atualizando os nossos imóveis.' : 'Nenhum imóvel com esses filtros por aqui.';
+    $('#vazio-p').textContent = nenhum
+      ? 'Chame a gente no WhatsApp e mostramos o que temos disponível.'
+      : 'Podemos ter algo que ainda não está no site. Conte o que você procura.';
+    $('#limpar').hidden = nenhum;
     $$('.chip').forEach(c => c.setAttribute('aria-pressed', String(c.dataset.tipo === state.tipo)));
   };
 

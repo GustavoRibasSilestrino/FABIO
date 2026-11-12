@@ -109,6 +109,7 @@ p { text-wrap: pretty; }
               border-color 0.25s var(--ease), transform 0.25s var(--ease);
 }
 .btn:active { transform: scale(0.97); }
+.btn[hidden] { display: none; }
 .btn--sm { min-height: 2.75rem; padding: 0 1.15rem; font-size: 0.9375rem; }
 .btn--lg { min-height: 3.75rem; padding: 0 2rem; font-size: 1.0625rem; }
 .btn--primary { background: var(--acafrao); color: var(--tinta); }
@@ -382,7 +383,6 @@ p { text-wrap: pretty; }
 .vazio[hidden] { display: none; }
 .vazio__t { font: 700 1.5rem/1.2 var(--f-display); letter-spacing: -0.02em; margin-bottom: 0.5rem; }
 .vazio__acoes { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.375rem; }
-.demo-nota { margin-top: 3.5rem; font-size: 0.875rem; color: var(--tinta-suave); }
 
 /* imóveis cadastrados no painel: título que abre a galeria, vendido, sem foto */
 .filtro[hidden] { display: none; }
