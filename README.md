@@ -32,8 +32,8 @@ Tudo abaixo hoje é **ilustrativo**. Nada disso é dado real do Fábio.
 
 | O quê | Onde | Hoje |
 | --- | --- | --- |
-| Número do WhatsApp | `public/js/main.js` (`SITE.whatsapp`) e o link `tel:` em `public/index.html` | `5519900000000` |
-| Telefone exibido | `public/js/main.js` (`SITE.telefone`) e `public/index.html` | `(19) 90000-0000` |
+| Número do WhatsApp | `public/js/main.js` (`SITE.whatsapp`) e o link `tel:` em `public/index.html` | `5519974216218` (real) |
+| Telefone exibido | `public/js/main.js` (`SITE.telefone`) e `public/index.html` | `(19) 97421-6218` (real) |
 | CRECI | `public/js/main.js` (`SITE.creci`) e `public/index.html` | `195959` (real, informado pelo Fábio) |
 | Nome / logotipo | `public/index.html` (`.marca`), `public/assets/favicon.svg`, título da página | "Fábio Ribas" (real) |
 | Endereço | seção `#contato` e rodapé em `public/index.html` | Rua José Olegário, 246, Residencial Dona Margarida (real) |
