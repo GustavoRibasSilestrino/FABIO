@@ -265,6 +265,18 @@ p { text-wrap: pretty; }
   .busca { row-gap: 0.5rem; }
   .busca .busca__codigo .entrada, .busca__codigo-ok { min-height: clamp(2.5rem, 4.8vh, 3rem); }
 }
+/* janelas estreitas de computador (900 a 1199px): o botão e o link de baixo do título ficam na mesma linha */
+@media (min-width: 900px) and (max-width: 1199px) {
+  .hero__sub { font-size: 1rem; }
+  .hero__acoes { gap: 0.5rem 1rem; }
+  .hero__acoes .btn--lg { min-height: 3.25rem; padding: 0 1.25rem; font-size: 0.9375rem; }
+  .hero__acoes .link-seta { font-size: 0.9375rem; }
+}
+/* janela de computador bem pequena (largura até ~1020px e pouca altura): o link "Quero vender" sai do topo
+   (continua no menu), para o botão de WhatsApp e a busca inteira caberem */
+@media (min-width: 900px) and (max-width: 1019px) and (max-height: 860px) {
+  .hero__acoes .link-seta { display: none; }
+}
 /* notebooks de tela baixa: espaços e título menores para a busca (com a linha do código) caber na primeira tela */
 @media (min-width: 900px) and (max-height: 860px) {
   .hero__copy { padding-block: 1rem; }
