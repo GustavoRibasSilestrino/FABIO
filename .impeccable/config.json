@@ -11,6 +11,15 @@
         ],
         "createdAt": "2026-11-12T13:24:02.546Z",
         "reason": "assistant triage, not user confirmed: measured in a real browser at 1440px: .wrap insets 73px each side, section padding 128px/112px, .passo 34px, .vazio 36px/40px; the detector parser does not resolve clamp()/min()/var(). Hero and vender arches are intentionally flush with the section foot (ground line); their text columns are inset."
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "public/admin.html"
+        ],
+        "createdAt": "2026-11-12T17:18:21.847Z",
+        "reason": "assistant triage, not user confirmed: static scan cannot resolve the root-absolute /css/admin.css link, so .adm-cartao looks unpadded. Measured in a real browser at 375px: .adm-cartao padding is 20px (clamp 1.25rem to 2.25rem), form fields 295px inside a 335px card. A scan of the rendered page (impeccable detect http://127.0.0.1:8791/admin.html) reports nothing."
       }
     ]
   }
