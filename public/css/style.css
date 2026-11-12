@@ -321,6 +321,62 @@ p { text-wrap: pretty; }
 .vazio__acoes { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.375rem; }
 .demo-nota { margin-top: 3.5rem; font-size: 0.875rem; color: var(--tinta-suave); }
 
+/* imóveis cadastrados no painel: título que abre a galeria, vendido, sem foto */
+.filtro[hidden] { display: none; }
+.imovel__foto[data-abrir] { cursor: pointer; }
+.imovel h3 .imovel__abrir {
+  all: unset; box-sizing: border-box; display: inline; cursor: pointer; font: inherit; letter-spacing: inherit; color: inherit;
+  text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 2px; text-underline-offset: 0.25rem;
+  transition: text-decoration-color 0.25s var(--ease);
+}
+.imovel h3 .imovel__abrir:hover { text-decoration-color: var(--acafrao); }
+.imovel h3 .imovel__abrir:focus-visible { outline: 3px solid var(--cobalto); outline-offset: 3px; }
+.imovel__sem-foto { position: absolute; inset: 0; display: grid; place-items: center; color: var(--menta); font-weight: 700; }
+.imovel--vendido .imovel__foto img { filter: grayscale(0.7); }
+.preco--texto { font-size: clamp(1.35rem, 1.2rem + 0.5vw, 1.6rem); letter-spacing: -0.02em; color: var(--tinta-suave); }
+
+/* galeria de fotos do imóvel */
+body:has(dialog.galeria[open]) { overflow: hidden; }
+.galeria {
+  width: min(100% - 1.5rem, 72rem); max-width: none; max-height: calc(100vh - 1.5rem); max-height: calc(100dvh - 1.5rem);
+  margin: auto; padding: 0; border: 0; overflow: auto; background: var(--concreto-claro); color: var(--tinta);
+  border-radius: var(--curva-s) 0.375rem 0.375rem 0.375rem;
+}
+.galeria::backdrop { background: rgba(8, 61, 43, 0.88); }
+.galeria [hidden] { display: none !important; }
+.galeria__in { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); }
+.galeria__fechar, .galeria__nav {
+  display: grid; place-items: center; width: 3rem; height: 3rem; padding: 0; border: 0; border-radius: 50%;
+  background: var(--concreto-claro); color: var(--tinta); cursor: pointer; transition: background-color 0.25s var(--ease);
+}
+.galeria__fechar:hover, .galeria__nav:hover { background: var(--acafrao); }
+.galeria__fechar { position: absolute; top: 0.75rem; right: 0.75rem; z-index: 3; }
+.galeria__palco { position: relative; aspect-ratio: 4 / 3; max-height: 62vh; max-height: 62dvh; background: var(--jardim-fundo); }
+.galeria__img { width: 100%; height: 100%; object-fit: contain; }
+.galeria__nav { position: absolute; top: 50%; transform: translateY(-50%); }
+.galeria__nav--ant { left: 0.75rem; }
+.galeria__nav--prox { right: 0.75rem; }
+.galeria__nav--ant .i { transform: scaleX(-1); }
+.galeria__cont {
+  position: absolute; left: 0.75rem; bottom: 0.75rem; padding: 0.375rem 0.75rem; border-radius: 62.4375rem;
+  background: rgba(16, 36, 28, 0.82); color: #fff; font-size: 0.8125rem; font-weight: 700; line-height: 1.2;
+}
+.galeria__minis { display: flex; gap: 0.5rem; padding: 0.75rem; overflow-x: auto; background: var(--jardim-fundo); }
+.galeria__mini {
+  flex: none; width: 4.5rem; aspect-ratio: 4 / 3; padding: 0; border: 3px solid transparent; border-radius: 0.375rem;
+  overflow: hidden; background: none; cursor: pointer; opacity: 0.7; transition: opacity 0.25s var(--ease);
+}
+.galeria__mini img { width: 100%; height: 100%; object-fit: cover; }
+.galeria__mini:hover { opacity: 1; }
+.galeria__mini[aria-current="true"] { border-color: var(--acafrao); opacity: 1; }
+.galeria__texto { padding: clamp(1.25rem, 3vw, 2.25rem); }
+.galeria__texto h3 { font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem); letter-spacing: -0.025em; line-height: 1.1; }
+.galeria__desc { margin-top: 1.25rem; max-width: 40em; white-space: pre-line; color: var(--tinta-suave); }
+@media (min-width: 900px) {
+  .galeria__in { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+  .galeria__palco { aspect-ratio: auto; height: clamp(22rem, 66vh, 40rem); height: clamp(22rem, 66dvh, 40rem); max-height: none; }
+}
+
 /* ---------- Vender ---------- */
 .vender { background: var(--cobalto); color: #fff; overflow: clip; }
 .vender__in { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(1.5rem, 5vw, 5rem); align-items: end; }

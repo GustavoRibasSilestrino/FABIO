@@ -16,11 +16,19 @@ Ou abra `public/index.html` direto no navegador (a busca, o WhatsApp e o formul�
 
 ```
 public/
-  index.html        conteúdo e estrutura
+  index.html        conteúdo e estrutura do site
+  admin.html        painel de imóveis (aparece em /admin)
   css/style.css     identidade visual (tokens de cor e tipografia no topo)
+  css/admin.css     estilos do painel
   js/main.js        busca/filtro, formulário → WhatsApp, menu, animações de rolagem
+  js/config.js      endereço e chave pública do Supabase (único arquivo de ligação)
+  js/comum.js       cidades, tipos de imóvel e funções usadas pelo site e pelo painel
+  js/imoveis.js     lê os imóveis do Supabase, monta os cartões e a galeria de fotos
+  js/admin.js       login, cadastro de imóveis e envio de fotos
+  js/vendor/        supabase-js (biblioteca, copiada para cá; licença MIT)
   assets/img/       fotos (hoje, imagens ilustrativas do Unsplash)
   assets/fonts/     Bricolage Grotesque e Hanken Grotesk (hospedadas aqui)
+supabase/schema.sql tabelas, regras de segurança e pasta de fotos do banco (rodar no SQL Editor)
 vercel.json         publica a pasta public/ e define cabeçalhos de cache
 PRODUCT.md          contexto do produto (público, objetivo, restrições)
 DESIGN.md           sistema visual (cores, tipografia, componentes)
@@ -40,7 +48,7 @@ A coluna "Hoje" diz o que já é real (informado pelo Fábio) e o que ainda é *
 | Texto "Sobre", números (8 anos, 200 negociações, 180 imóveis, 60 parceiros) e método de avaliação | seções `#sobre` e `#vender` em `public/index.html` | texto e números informados pelo Fábio (reais) |
 | Fotos do topo, dos imóveis e dos ambientes | `public/assets/img/` (mantenha os nomes ou ajuste os `src` no HTML) | Unsplash |
 | Foto do Fábio | seção `#sobre` em `public/index.html` e `public/assets/img/fabio-ribas.jpg` | foto real (enviada pelo Fábio) |
-| Imóveis (código, bairro, quartos, preço, texto) | cartões `.imovel` em `public/index.html` | 6 exemplos |
+| Imóveis (código, bairro, quartos, preço, fotos, texto) | cadastrados pelo painel `/admin` (veja abaixo). Os 6 cartões `.imovel` de `public/index.html` são só de exemplo | exemplos aparecem enquanto não houver nenhum imóvel real cadastrado; no primeiro imóvel real eles somem sozinhos (e dá para apagá-los do HTML) |
 | Cidades e bairro da busca | `<select id="f-cidade">` (lista de cidades) e `<input id="f-bairro">` (o visitante digita o bairro) em `public/index.html`; a busca compara o texto com o `data-bairro` de cada imóvel, sem acento e sem maiúsculas; cada imóvel tem `data-cidade` | cidades informadas pelo Fábio; bairros dos cartões são de exemplo |
 | Textos de apresentação, "como funciona" e promessas | `public/index.html` | texto provisório, confirmar com o Fábio |
 | Instagram e depoimentos reais | ainda não existem na página | a adicionar |
@@ -48,7 +56,19 @@ A coluna "Hoje" diz o que já é real (informado pelo Fábio) e o que ainda é *
 | Indexação no Google | `public/index.html` | `noindex` removido em 12/11/2026 (decisão do Gustavo), com `canonical` e `og:url` apontando para `https://fabioribasimoveis.com.br/`. O conteúdo ainda tem imóveis e fotos de exemplo |
 | Domínio | Vercel (projeto `fabio-imoveis`) e DNS no Registro.br; `vercel.json` redireciona `www` para o domínio principal | `fabioribasimoveis.com.br` |
 
-Para um novo imóvel, copie um bloco `<article class="imovel" …>` e ajuste `data-cidade`, `data-tipo` (casa, casa-condominio, sobrado, apartamento, terreno, chacara, sitio ou comercial), `data-bairro` e `data-quartos` (a busca usa esses quatro campos), a foto e os textos.
+## Painel de imóveis (`/admin`)
+
+O Fábio entra em `https://fabioribasimoveis.com.br/admin` com e-mail e senha e cadastra, edita, oculta, marca como vendido ou exclui imóveis, com várias fotos (a primeira é a capa). Os imóveis ficam no Supabase e o site os lê ao abrir, então não é preciso mexer no código nem publicar de novo.
+
+- **Banco e fotos:** projeto Supabase `mhjvryysmsmtgekqcwvs`. As tabelas, as regras de segurança (RLS) e a pasta pública de fotos `imoveis` vêm de `supabase/schema.sql`.
+- **Quem pode editar:** só os e-mails da tabela `public.admins`. Para liberar outra pessoa, crie o usuário em Authentication > Users e rode `insert into public.admins (email) values ('email@dela.com');`. O cadastro público de usuários fica desligado.
+- **Ligação:** `public/js/config.js` tem o endereço do projeto e a chave **pública** (`sb_publishable_…` ou `anon`). Nunca coloque ali a chave `secret` ou `service_role`.
+- **Fotos:** o painel reduz cada foto no navegador e guarda duas versões, a grande (até 1800 px, galeria) e a média (até 900 px, cartões).
+- **Se a chave ainda não estiver preenchida:** o site mostra os exemplos do HTML e o painel avisa que não está conectado.
+- **Se o Supabase não responder** (por exemplo, projeto gratuito pausado por falta de uso): o site mostra "Não conseguimos carregar os imóveis agora" com o botão de WhatsApp. Para voltar, abra o projeto no painel do Supabase e use **Restore project**.
+- **Senha esquecida:** o link "Esqueci minha senha" do painel envia um e-mail de recuperação. Os endereços `https://fabioribasimoveis.com.br/admin` e `https://fabio-imoveis.vercel.app/admin` precisam estar em Authentication > URL Configuration > Redirect URLs.
+
+Os valores aceitos em `tipo` são: casa, casa-condominio, sobrado, apartamento, terreno, chacara, sitio e comercial. As cidades e os tipos exibidos estão em `public/js/comum.js`; para incluir uma cidade nova, edite a lista `CIDADES` ali e o `<select id="f-cidade">` de `public/index.html`.
 
 ## Publicação
 

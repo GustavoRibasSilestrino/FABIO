@@ -19,11 +19,14 @@
   $$('[data-site-tel]').forEach(a => { a.href = 'tel:+' + SITE.whatsapp; });
 
   const waUrl = msg => `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(msg)}`;
-  $$('[data-wa]').forEach(a => {
+  const preencheWa = (raiz = document) => $$('[data-wa]', raiz).forEach(a => {
     a.href = waUrl(a.dataset.wa);
     a.target = '_blank';
     a.rel = 'noopener';
   });
+  preencheWa();
+  // js/imoveis.js usa estas duas funções para os cartões e a galeria que monta depois de carregar
+  window.FABIO = Object.assign(window.FABIO || {}, { waUrl, preencheWa });
 
   /* ---------- Menu no celular ---------- */
   const menuBtn = $('.menu-btn');
@@ -46,10 +49,12 @@
   const selTipo = $('#f-tipo');
   const campoBairro = $('#f-bairro');
   const selQuartos = $('#f-quartos');
-  const chips = $$('.chip');
-  const cards = $$('.imovel');
+  const filtro = $('.filtro');
+  const grade = $('#grade');
   const resultado = $('#resultado');
   const vazio = $('#vazio');
+  // os cartões e os filtros podem ser trocados por js/imoveis.js (imóveis do painel), por isso são lidos de novo
+  let cards = $$('.imovel');
 
   const state = { cidade: selCidade.value, tipo: '', bairro: '', quartos: 0 };
 
@@ -82,9 +87,11 @@
         shown += 1;
       }
     });
+    const erro = grade.dataset.erro === '1';
     resultado.textContent = shown === 1 ? '1 imóvel' : `${shown} imóveis`;
-    vazio.hidden = shown !== 0;
-    chips.forEach(c => c.setAttribute('aria-pressed', String(c.dataset.tipo === state.tipo)));
+    resultado.hidden = erro;
+    vazio.hidden = shown !== 0 || erro;
+    $$('.chip').forEach(c => c.setAttribute('aria-pressed', String(c.dataset.tipo === state.tipo)));
   };
 
   const readSelects = () => {
@@ -103,11 +110,13 @@
     setTimeout(() => resultado.focus({ preventScroll: true }), reduceMotion ? 0 : 500);
   });
 
-  chips.forEach(chip => chip.addEventListener('click', () => {
+  filtro.addEventListener('click', e => {
+    const chip = e.target.closest('.chip');
+    if (!chip) return;
     state.tipo = chip.dataset.tipo;
     selTipo.value = state.tipo;
     render(true);
-  }));
+  });
 
   $('#limpar').addEventListener('click', () => {
     selCidade.selectedIndex = 0;
@@ -167,18 +176,29 @@
   const flutuante = $('#wa-flutuante');
   const vistos = new Set();
   const atualizaFlutuante = () => flutuante.classList.toggle('is-oculto', vistos.size > 0);
+  let obsFlutuante = null;
   if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver(entries => {
+    obsFlutuante = new IntersectionObserver(entries => {
       entries.forEach(en => { en.isIntersecting ? vistos.add(en.target) : vistos.delete(en.target); });
       atualizaFlutuante();
     }, { threshold: 0.2 });
     // some enquanto a busca ou qualquer botão de WhatsApp da página já está na tela, para nunca cobri-los
-    $$('main a[data-wa]').forEach(el => io.observe(el));
-    io.observe($('#busca'));
-    io.observe($('#contato'));
+    $$('main a[data-wa]').forEach(el => obsFlutuante.observe(el));
+    obsFlutuante.observe($('#busca'));
+    obsFlutuante.observe($('#contato'));
   } else {
     flutuante.classList.remove('is-oculto');
   }
+
+  /* ---------- Quando js/imoveis.js troca os cartões pelos imóveis cadastrados no painel ---------- */
+  document.addEventListener('imoveis:atualizados', () => {
+    cards = $$('.imovel');
+    preencheWa($('#imoveis'));
+    if (obsFlutuante) $$('#imoveis a[data-wa]').forEach(el => obsFlutuante.observe(el));
+    vistos.forEach(el => { if (!el.isConnected) vistos.delete(el); });
+    atualizaFlutuante();
+    render(false);
+  });
 
   /* ---------- Revelação ao rolar ---------- */
   if ('IntersectionObserver' in window && !reduceMotion) {

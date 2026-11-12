@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel de imóveis | Fábio Ribas</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0D5C41">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body class="adm">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<header class="adm-topo">
+  <div class="adm-topo__in">
+    <a class="adm-marca" href="/admin">
+      <img src="/assets/img/logo-fabio-ribas.webp" width="640" height="553" alt="">
+      <span>Painel de imóveis</span>
+    </a>
+    <nav class="adm-topo__acoes" id="acoes-topo" aria-label="Ações do painel" hidden>
+      <a class="adm-link" href="/" target="_blank" rel="noopener">Ver o site</a>
+      <button class="adm-link" type="button" id="btn-senha">Trocar senha</button>
+      <button class="adm-link" type="button" id="btn-sair">Sair</button>
+    </nav>
+  </div>
+</header>
+
+<main class="adm-main" id="conteudo">
+  <p class="adm-aviso" id="aviso" role="status" aria-live="polite" hidden></p>
+
+  <!-- painel ainda sem a chave do Supabase -->
+  <section class="adm-cartao adm-cartao--estreito" id="v-conexao" aria-labelledby="t-conexao" hidden>
+    <h1 id="t-conexao" tabindex="-1">Painel ainda não conectado</h1>
+    <p class="adm-sub">Falta colocar a chave do Supabase em <code>public/js/config.js</code>. Fale com quem cuida do site.</p>
+  </section>
+
+  <!-- entrar -->
+  <section class="adm-cartao adm-cartao--estreito" id="v-login" aria-labelledby="t-login" hidden>
+    <h1 id="t-login" tabindex="-1">Entrar no painel</h1>
+    <p class="adm-sub">Use o e-mail e a senha de administrador.</p>
+    <form class="adm-form" id="f-login" novalidate>
+      <div class="campo">
+        <label for="l-email">E-mail</label>
+        <input class="entrada" id="l-email" name="email" type="email" inputmode="email" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+      </div>
+      <div class="campo">
+        <label for="l-senha">Senha</label>
+        <input class="entrada" id="l-senha" name="senha" type="password" autocomplete="current-password" required>
+      </div>
+      <p class="erro" id="l-erro" role="alert"></p>
+      <button class="btn btn--primary" type="submit" id="btn-entrar">Entrar</button>
+      <button class="adm-link adm-link--texto" type="button" id="btn-esqueci">Esqueci minha senha</button>
+    </form>
+  </section>
+
+  <!-- criar ou trocar senha -->
+  <section class="adm-cartao adm-cartao--estreito" id="v-senha" aria-labelledby="t-senha" hidden>
+    <h1 id="t-senha" tabindex="-1">Criar nova senha</h1>
+    <p class="adm-sub" id="senha-sub">Escolha uma senha com pelo menos 8 caracteres.</p>
+    <form class="adm-form" id="f-senha" novalidate>
+      <input type="text" name="usuario" autocomplete="username" hidden tabindex="-1" aria-hidden="true">
+      <div class="campo">
+        <label for="s-nova">Nova senha</label>
+        <input class="entrada" id="s-nova" type="password" autocomplete="new-password" required minlength="8">
+      </div>
+      <div class="campo">
+        <label for="s-repete">Repita a nova senha</label>
+        <input class="entrada" id="s-repete" type="password" autocomplete="new-password" required minlength="8">
+      </div>
+      <p class="erro" id="s-erro" role="alert"></p>
+      <button class="btn btn--primary" type="submit">Salvar nova senha</button>
+      <button class="btn btn--ghost" type="button" id="btn-senha-volta" hidden>Voltar</button>
+    </form>
+  </section>
+
+  <!-- lista de imóveis -->
+  <section id="v-lista" aria-labelledby="t-lista" hidden>
+    <div class="adm-cab">
+      <div>
+        <h1 id="t-lista" tabindex="-1">Imóveis</h1>
+        <p class="adm-sub" id="lista-resumo"></p>
+      </div>
+      <button class="btn btn--primary" type="button" id="btn-novo">Novo imóvel</button>
+    </div>
+    <ul class="adm-lista" id="lista"></ul>
+    <p class="adm-vazio" id="lista-vazio" hidden>Nenhum imóvel cadastrado ainda. Toque em “Novo imóvel” para começar.</p>
+  </section>
+
+  <!-- cadastrar / editar -->
+  <section id="v-form" aria-labelledby="t-form" hidden>
+    <div class="adm-cab">
+      <div>
+        <h1 id="t-form" tabindex="-1">Novo imóvel</h1>
+        <p class="adm-sub" id="form-cod"></p>
+      </div>
+    </div>
+
+    <form class="adm-cartao adm-form" id="f-imovel" novalidate>
+      <fieldset class="adm-bloco">
+        <legend>Fotos</legend>
+        <p class="adm-ajuda">A primeira foto é a capa do anúncio. Você pode escolher várias de uma vez, direto da galeria do celular. Use as setas para mudar a ordem.</p>
+        <ul class="adm-fotos" id="fotos"></ul>
+        <label class="btn btn--ink adm-upload" id="rotulo-upload">
+          <input type="file" id="f-arquivos" accept="image/*" multiple>
+          Adicionar fotos
+        </label>
+        <p class="adm-ajuda" id="fotos-status" role="status" aria-live="polite"></p>
+      </fieldset>
+
+      <fieldset class="adm-bloco">
+        <legend>Onde fica</legend>
+        <div class="adm-grade">
+          <div class="campo">
+            <label for="i-tipo">Tipo de imóvel</label>
+            <div class="select">
+              <select id="i-tipo" required></select>
+              <svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg>
+            </div>
+          </div>
+          <div class="campo">
+            <label for="i-cidade">Cidade</label>
+            <div class="select">
+              <select id="i-cidade" required></select>
+              <svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg>
+            </div>
+          </div>
+          <div class="campo adm-grade__tudo">
+            <label for="i-bairro">Bairro</label>
+            <input class="entrada" id="i-bairro" type="text" autocomplete="off" maxlength="80" required>
+          </div>
+          <div class="campo adm-grade__tudo">
+            <label for="i-titulo">Título do anúncio <span class="adm-opcional">(opcional)</span></label>
+            <input class="entrada" id="i-titulo" type="text" autocomplete="off" maxlength="120" placeholder="Ex.: Sobrado moderno com varanda e quintal">
+            <p class="adm-ajuda">Se deixar vazio, o site usa “Tipo em Bairro”.</p>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="adm-bloco">
+        <legend>Detalhes</legend>
+        <div class="adm-grade">
+          <div class="campo">
+            <label for="i-quartos">Quartos</label>
+            <input class="entrada" id="i-quartos" type="number" inputmode="numeric" min="0" max="50" step="1">
+          </div>
+          <div class="campo">
+            <label for="i-banheiros">Banheiros</label>
+            <input class="entrada" id="i-banheiros" type="number" inputmode="numeric" min="0" max="50" step="1">
+          </div>
+          <div class="campo">
+            <label for="i-vagas">Vagas</label>
+            <input class="entrada" id="i-vagas" type="number" inputmode="numeric" min="0" max="50" step="1">
+          </div>
+          <div class="campo">
+            <label for="i-area">Área (m²)</label>
+            <input class="entrada" id="i-area" type="text" inputmode="decimal" autocomplete="off" placeholder="Ex.: 180">
+          </div>
+        </div>
+        <p class="adm-ajuda">Deixe em branco o que não se aplica (por exemplo, quartos de um terreno).</p>
+      </fieldset>
+
+      <fieldset class="adm-bloco">
+        <legend>Valor e descrição</legend>
+        <div class="campo">
+          <label for="i-preco">Preço (R$)</label>
+          <input class="entrada" id="i-preco" type="text" inputmode="numeric" autocomplete="off" placeholder="Ex.: 690.000">
+          <p class="adm-ajuda">Deixe vazio para mostrar “Consulte” no site.</p>
+        </div>
+        <div class="campo">
+          <label for="i-descricao">Descrição <span class="adm-opcional">(opcional)</span></label>
+          <textarea class="entrada" id="i-descricao" rows="6" maxlength="4000" placeholder="Conte o que o imóvel tem de melhor, a localização, o que está incluso…"></textarea>
+          <p class="adm-ajuda">Aparece quando o cliente abre as fotos do imóvel.</p>
+        </div>
+      </fieldset>
+
+      <fieldset class="adm-bloco">
+        <legend>Publicação</legend>
+        <div class="opcoes" role="radiogroup" aria-label="Situação do imóvel">
+          <label class="opcao"><input type="radio" name="i-status" value="ativo" checked><span>No site</span></label>
+          <label class="opcao"><input type="radio" name="i-status" value="vendido"><span>Vendido</span></label>
+          <label class="opcao"><input type="radio" name="i-status" value="oculto"><span>Oculto (fora do site)</span></label>
+        </div>
+        <label class="adm-check">
+          <input type="checkbox" id="i-destaque">
+          <span>Mostrar com o selo “Destaque” e entre os primeiros</span>
+        </label>
+      </fieldset>
+
+      <p class="erro" id="i-erro" role="alert"></p>
+      <div class="adm-acoes">
+        <button class="btn btn--primary" type="submit" id="btn-salvar">Salvar imóvel</button>
+        <button class="btn btn--ghost" type="button" id="btn-cancelar">Cancelar</button>
+      </div>
+    </form>
+  </section>
+</main>
+
+<dialog class="adm-dialogo" id="d-confirma" aria-labelledby="d-confirma-t">
+  <div class="adm-dialogo__in">
+    <h2 id="d-confirma-t">Tem certeza?</h2>
+    <p id="d-confirma-txt"></p>
+    <div class="adm-acoes">
+      <button class="btn btn--ghost" type="button" id="d-confirma-nao" autofocus>Cancelar</button>
+      <button class="btn btn--perigo" type="button" id="d-confirma-sim">Excluir</button>
+    </div>
+  </div>
+</dialog>
+
+<script src="/js/config.js"></script>
+<script src="/js/comum.js"></script>
+<script src="/js/vendor/supabase.js"></script>
+<script src="/js/admin.js"></script>
+</body>
+</html>

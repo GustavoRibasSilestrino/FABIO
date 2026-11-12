@@ -1,0 +1,138 @@
+/* ==========================================================================
+   Painel /admin. Usa os tokens, os botões e os campos de css/style.css.
+   Mesmo mundo visual do site: campos de cor chapada, uma curva por peça, sem sombra.
+   ========================================================================== */
+
+.adm { min-height: 100vh; }
+.adm [hidden] { display: none !important; }
+
+/* ---------- topo ---------- */
+.adm-topo { background: var(--jardim); color: #fff; }
+.adm-topo__in {
+  width: calc(100% - 2.5rem); width: min(100% - 2 * var(--gutter), 64rem); margin-inline: auto;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 1.5rem; min-height: 4.5rem; padding-block: 0.375rem;
+}
+.adm-marca { display: inline-flex; align-items: center; gap: 0.875rem; color: #fff; text-decoration: none; }
+.adm-marca img { display: block; width: auto; height: 2.875rem; }
+.adm-marca span { font: 700 1.125rem/1.1 var(--f-display); letter-spacing: -0.02em; }
+.adm-topo__acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 0 1.25rem; margin-left: auto; }
+
+.adm-link {
+  display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0; border: 0; background: none;
+  color: inherit; font: 600 0.9375rem var(--f-text); cursor: pointer; text-decoration: underline;
+  text-decoration-thickness: 2px; text-underline-offset: 0.3125rem; text-decoration-color: rgba(255, 255, 255, 0.4);
+}
+.adm-link:hover { text-decoration-color: var(--acafrao); }
+.adm-topo :focus-visible { outline-color: var(--acafrao); }
+.adm-link--texto { justify-content: center; color: var(--tinta); text-decoration-color: var(--tinta-suave); }
+.adm-link--texto:hover { text-decoration-color: var(--jardim); }
+
+/* ---------- miolo ---------- */
+.adm-main {
+  width: calc(100% - 2.5rem); width: min(100% - 2 * var(--gutter), 64rem); margin-inline: auto;
+  padding-block: clamp(1.5rem, 4vw, 2.75rem) 5rem;
+}
+.adm-main h1 { font-size: clamp(1.75rem, 1.3rem + 2vw, 2.5rem); font-weight: 800; letter-spacing: -0.03em; }
+.adm-main h1:focus { outline: none; }
+.adm-sub { margin-top: 0.5rem; color: var(--tinta-suave); }
+.adm-sub code { font-size: 0.9em; background: var(--concreto); padding: 0.1em 0.4em; border-radius: 0.25rem; }
+.adm-cab { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1rem 2rem; margin-bottom: 1.5rem; }
+
+.adm-cartao {
+  padding: clamp(1.25rem, 3.4vw, 2.25rem); background: var(--concreto-claro);
+  border-radius: var(--curva-s) 0.375rem 0.375rem 0.375rem;
+}
+.adm-cartao--estreito { max-width: 28rem; margin-inline: auto; }
+
+.adm-aviso {
+  position: sticky; top: 0.75rem; z-index: 20; margin-bottom: 1.25rem; padding: 0.875rem 1.125rem;
+  border-radius: 0.75rem; font-weight: 700; background: var(--menta); color: var(--jardim-fundo);
+}
+.adm-aviso--erro { background: #f7dcda; color: var(--erro); }
+
+/* ---------- formulários ---------- */
+.adm-form { display: grid; gap: 1.125rem; }
+.adm .entrada {
+  width: 100%; min-height: 3.25rem; padding: 0.75rem 0.875rem; background: #fff;
+  border: 2px solid var(--tinta); border-radius: 0.75rem; font-size: 1.0625rem; font-weight: 500;
+}
+.adm textarea.entrada { min-height: 8rem; resize: vertical; line-height: 1.5; }
+.adm .entrada::placeholder { color: #5d6f64; opacity: 1; }
+.adm .entrada[aria-invalid="true"], .adm select[aria-invalid="true"] { border-color: var(--erro); }
+.adm .select select { min-height: 3.25rem; font-size: 1.0625rem; }
+.adm :focus-visible { outline-color: var(--cobalto); }
+
+.adm-bloco { min-width: 0; margin: 0; padding: 0; border: 0; }
+.adm-bloco + .adm-bloco { margin-top: 1.75rem; padding-top: 1.75rem; border-top: 1.5px solid rgba(16, 36, 28, 0.2); }
+.adm-bloco legend { margin-bottom: 0.875rem; padding: 0; font: 700 1.3125rem/1.2 var(--f-display); letter-spacing: -0.02em; }
+.adm-bloco .campo + .campo { margin-top: 1.125rem; }
+.adm-grade { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.125rem; }
+.adm-grade__tudo { grid-column: 1 / -1; }
+.adm-ajuda { margin-top: 0.5rem; font-size: 0.875rem; color: var(--tinta-suave); }
+.adm-ajuda:empty { display: none; }
+.adm-opcional { font-weight: 500; }
+.adm-acoes { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.5rem; }
+.adm-check { display: flex; align-items: flex-start; gap: 0.75rem; margin-top: 1.25rem; font-weight: 500; cursor: pointer; }
+.adm-check input { flex: none; width: 1.5rem; height: 1.5rem; margin-top: 0.125rem; cursor: pointer; }
+
+.btn--perigo { background: transparent; border-color: var(--erro); color: var(--erro); }
+.btn--perigo:hover { background: var(--erro); color: #fff; }
+.btn[disabled] { opacity: 0.55; cursor: progress; }
+
+/* ---------- fotos do imóvel ---------- */
+.adm-fotos { display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); gap: 0.75rem; margin-bottom: 1rem; }
+.adm-fotos:empty { display: none; }
+.adm-foto { position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 0.5rem; background: var(--jardim-fundo); }
+.adm-foto img { width: 100%; height: 100%; object-fit: cover; }
+.adm-foto__capa {
+  position: absolute; left: 0.375rem; top: 0.375rem; padding: 0.25rem 0.625rem; border-radius: 62.4375rem;
+  background: var(--acafrao); color: var(--tinta); font-size: 0.75rem; font-weight: 700; line-height: 1.2;
+}
+.adm-foto__ctl { position: absolute; inset: auto 0 0 0; display: flex; justify-content: space-between; padding: 0.25rem; background: rgba(16, 36, 28, 0.78); }
+.adm-mini {
+  display: grid; place-items: center; width: 2.75rem; height: 2.75rem; padding: 0; border: 0; border-radius: 50%;
+  background: transparent; color: #fff; font: 700 1.5rem/1 var(--f-text); cursor: pointer;
+}
+.adm-mini:hover:not([disabled]) { background: var(--acafrao); color: var(--tinta); }
+.adm-mini[disabled] { opacity: 0.3; cursor: default; }
+.adm-mini:focus-visible { outline-color: var(--acafrao); outline-offset: -3px; }
+.adm-upload { position: relative; cursor: pointer; }
+.adm-upload input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+.adm-upload:focus-within { outline: 3px solid var(--cobalto); outline-offset: 3px; }
+.adm-upload.is-ocupado { opacity: 0.55; pointer-events: none; }
+
+/* ---------- lista de imóveis ---------- */
+.adm-lista { display: grid; gap: 1rem; }
+.adm-item {
+  display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: 0.875rem 1rem; padding: 1rem;
+  background: var(--concreto-claro); border-radius: 0.375rem var(--curva-s) 0.375rem 0.375rem;
+}
+.adm-item__foto { aspect-ratio: 1; overflow: hidden; border-radius: 0.5rem; background: var(--jardim-fundo); }
+.adm-item__foto img { width: 100%; height: 100%; object-fit: cover; }
+.adm-item__cod { font-size: 0.8125rem; font-weight: 700; color: var(--tinta-suave); }
+.adm-item__tit { margin-top: 0.125rem; font: 700 1.1875rem/1.2 var(--f-display); letter-spacing: -0.02em; overflow-wrap: anywhere; }
+.adm-item__meta { margin-top: 0.25rem; font-size: 0.9375rem; color: var(--tinta-suave); }
+.adm-item__sel { display: flex; flex-wrap: wrap; gap: 0.375rem; margin-top: 0.625rem; }
+.adm-item__acoes { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.adm-badge { display: inline-block; padding: 0.25rem 0.625rem; border-radius: 62.4375rem; font-size: 0.75rem; font-weight: 700; line-height: 1.2; }
+.adm-badge--ativo { background: var(--menta); color: var(--jardim-fundo); }
+.adm-badge--vendido { background: var(--cobalto); color: #fff; }
+.adm-badge--oculto { border: 1.5px solid var(--tinta-suave); color: var(--tinta-suave); }
+.adm-badge--destaque { background: var(--acafrao); color: var(--tinta); }
+.adm-vazio { max-width: 34rem; padding: 2rem 1.5rem; background: var(--concreto-claro); border-radius: 0.375rem var(--curva-s) 0.375rem 0.375rem; font-weight: 500; }
+
+@media (min-width: 720px) {
+  .adm-item { grid-template-columns: 7rem minmax(0, 1fr) auto; align-items: center; }
+  .adm-item__acoes { grid-column: auto; flex-direction: column; align-items: stretch; }
+  .adm-grade { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .adm-bloco:nth-of-type(2) .adm-grade { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ---------- confirmação ---------- */
+.adm-dialogo {
+  width: min(100% - 2rem, 26rem); padding: 0; border: 0; background: var(--concreto-claro); color: var(--tinta);
+  border-radius: var(--curva-s) 0.375rem 0.375rem 0.375rem;
+}
+.adm-dialogo::backdrop { background: rgba(8, 61, 43, 0.88); }
+.adm-dialogo__in { display: grid; gap: 0.875rem; padding: 1.75rem; }
+.adm-dialogo h2 { font-size: 1.5rem; }
