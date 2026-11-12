@@ -6,7 +6,7 @@
   const SITE = {
     whatsapp: '5519900000000',      // DDI + DDD + número, só dígitos
     telefone: '(19) 90000-0000',    // como aparece na tela
-    creci: '000000-F'
+    creci: '195959'
   };
 
   const $ = (sel, ctx = document) => ctx.querySelector(sel);

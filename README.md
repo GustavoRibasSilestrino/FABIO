@@ -34,10 +34,12 @@ Tudo abaixo hoje é **ilustrativo**. Nada disso é dado real do Fábio.
 | --- | --- | --- |
 | Número do WhatsApp | `public/js/main.js` (`SITE.whatsapp`) e o link `tel:` em `public/index.html` | `5519900000000` |
 | Telefone exibido | `public/js/main.js` (`SITE.telefone`) e `public/index.html` | `(19) 90000-0000` |
-| CRECI | `public/js/main.js` (`SITE.creci`) e `public/index.html` | `000000-F` |
-| Nome completo / logotipo | `public/index.html` (`.marca`), `public/assets/favicon.svg`, título da página | "Fábio" |
+| CRECI | `public/js/main.js` (`SITE.creci`) e `public/index.html` | `195959` (real, informado pelo Fábio) |
+| Nome / logotipo | `public/index.html` (`.marca`), `public/assets/favicon.svg`, título da página | "Fábio Ribas" (real) |
+| Endereço | seção `#contato` e rodapé em `public/index.html` | Rua José Olegário, 246, Residencial Dona Margarida (real) |
+| Texto "Sobre", números (8 anos, 200 negociações, 180 imóveis, 60 parceiros) e método de avaliação | seções `#sobre` e `#vender` em `public/index.html` | texto e números informados pelo Fábio (reais) |
 | Fotos do topo, dos imóveis e dos ambientes | `public/assets/img/` (mantenha os nomes ou ajuste os `src` no HTML) | Unsplash |
-| Foto do Fábio | seção `#sobre` em `public/index.html` (hoje uma silhueta) | silhueta |
+| Foto do Fábio | seção `#sobre` em `public/index.html` (hoje uma silhueta) | silhueta; a foto real já foi enviada, falta salvar o arquivo em `public/assets/img/fabio-ribas.jpg` |
 | Imóveis (código, bairro, quartos, preço, texto) | cartões `.imovel` em `public/index.html` | 6 exemplos |
 | Bairros da busca | `<select id="f-bairro">` em `public/index.html` | exemplos |
 | Textos de apresentação, "como funciona" e promessas | `public/index.html` | texto provisório, confirmar com o Fábio |

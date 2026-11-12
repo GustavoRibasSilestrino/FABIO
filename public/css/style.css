@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Fábio · Corretor de Imóveis — Santa Bárbara d’Oeste
+   Fábio · Corretor de Imóveis
    Mundo visual: modernismo tropical. Campos de cor chapada, arcos e uma
    curva por peça. Profundidade só por camadas de cor, nunca sombra de vidro.
    ========================================================================== */
@@ -131,7 +131,7 @@ p { text-wrap: pretty; }
 .marca { display: inline-flex; align-items: center; gap: 0.75rem; text-decoration: none; }
 .marca__arco { width: 2.375rem; height: 2.375rem; }
 .marca__txt { display: grid; line-height: 1; }
-.marca__txt strong { font: 700 1.5rem/1 var(--f-display); letter-spacing: -0.03em; }
+.marca__txt strong { font: 700 clamp(1.25rem, 5.4vw, 1.5rem)/1 var(--f-display); letter-spacing: -0.03em; white-space: nowrap; }
 .marca__txt small { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; margin-top: 0.25rem; color: var(--menta); }
 
 .nav { display: flex; align-items: center; gap: clamp(1rem, 2.4vw, 2.25rem); margin-left: auto; }
@@ -313,6 +313,10 @@ p { text-wrap: pretty; }
 .vender__copy { padding-block: clamp(4rem, 8vw, 7rem) clamp(2.5rem, 6vw, 6rem); }
 .vender__copy h2 { max-width: 13em; }
 .vender__copy p { margin: 1.5rem 0 2rem; max-width: 34em; color: var(--azul-claro); font-size: clamp(1.0625rem, 0.95rem + 0.5vw, 1.3125rem); }
+.fatores { display: grid; gap: 0.75rem; margin: 0 0 2rem; max-width: 34em; }
+.fatores li { display: flex; align-items: flex-start; gap: 0.75rem; color: var(--azul-claro); font-size: clamp(1.0625rem, 0.95rem + 0.4vw, 1.1875rem); line-height: 1.45; }
+.fatores strong { color: #fff; }
+.fatores .i { color: var(--acafrao); margin-top: 0.125rem; }
 .vender__arte svg { width: 100%; height: auto; max-height: 26.25rem; margin-inline: auto; }
 
 /* ---------- Ambientes ---------- */
@@ -366,6 +370,8 @@ p { text-wrap: pretty; }
 .contato__lista { margin-top: 2rem; display: grid; gap: 0.375rem; }
 .contato__lista li { display: flex; align-items: center; gap: 0.875rem; min-height: 3rem; font-weight: 600; font-size: 1.0625rem; }
 .contato__lista .i { color: var(--acafrao); }
+.contato__lista .contato__end { align-items: flex-start; padding-top: 0.5rem; line-height: 1.5; }
+.contato__lista .contato__end .i { margin-top: 0.125rem; }
 .contato__lista a { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.3125rem; text-decoration-color: rgba(255,255,255,.4); }
 .contato__lista a:hover { text-decoration-color: var(--acafrao); }
 
