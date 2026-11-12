@@ -51,7 +51,7 @@
   const resultado = $('#resultado');
   const vazio = $('#vazio');
 
-  const state = { cidade: '', tipo: '', bairro: '', quartos: 0 };
+  const state = { cidade: selCidade.value, tipo: '', bairro: '', quartos: 0 };
 
   // os bairros listados dependem da cidade escolhida
   const ajustaBairros = () => {
@@ -116,12 +116,14 @@
   }));
 
   $('#limpar').addEventListener('click', () => {
-    state.cidade = ''; state.tipo = ''; state.bairro = ''; state.quartos = 0;
-    selCidade.value = ''; selTipo.value = ''; selBairro.value = ''; selQuartos.value = '0';
+    selCidade.selectedIndex = 0;
+    state.cidade = selCidade.value; state.tipo = ''; state.bairro = ''; state.quartos = 0;
+    selTipo.value = ''; selBairro.value = ''; selQuartos.value = '0';
     ajustaBairros();
     render(true);
   });
 
+  ajustaBairros();
   render(false);
 
   /* ---------- Formulário de contato → WhatsApp ---------- */
