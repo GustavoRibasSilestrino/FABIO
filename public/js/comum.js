@@ -29,6 +29,18 @@
     'sitio': 'Sítios', 'comercial': 'Imóveis comerciais'
   };
 
+  // Metragens de cada tipo: casa, sobrado, chácara, sítio e comercial têm terreno e construção;
+  // apartamento tem uma só (a do apartamento) e terreno tem uma só (a do terreno).
+  const AREAS = {
+    'casa': ['terreno', 'construida'], 'casa-condominio': ['terreno', 'construida'], 'sobrado': ['terreno', 'construida'],
+    'apartamento': ['construida'], 'terreno': ['terreno'],
+    'chacara': ['terreno', 'construida'], 'sitio': ['terreno', 'construida'], 'comercial': ['terreno', 'construida']
+  };
+  const areasDoTipo = tipo => AREAS[tipo] || ['terreno', 'construida'];
+  const rotuloArea = (tipo, qual) => (qual === 'terreno'
+    ? 'Área do terreno (m²)'
+    : (tipo === 'apartamento' ? 'Área do apartamento (m²)' : 'Área construída (m²)'));
+
   const rotulo = (lista, v) => {
     const item = lista.find(i => i.v === v);
     return item ? item.t : v;
@@ -45,7 +57,7 @@
 
   window.FABIO = Object.assign(window.FABIO || {}, {
     ativo: Boolean(base && key), base, key,
-    CIDADES, TIPOS, TIPOS_PLURAL,
+    CIDADES, TIPOS, TIPOS_PLURAL, AREAS, areasDoTipo, rotuloArea,
     rotulo, caminhoMedio, fotoUrl, numero, moeda, plural
   });
 })();

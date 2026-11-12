@@ -44,7 +44,8 @@ create table if not exists public.imoveis (
   quartos       smallint check (quartos between 0 and 50),
   banheiros     smallint check (banheiros between 0 and 50),
   vagas         smallint check (vagas between 0 and 50),
-  area          numeric(10, 2) check (area >= 0),
+  area_terreno  numeric(10, 2) check (area_terreno >= 0),     -- m² do terreno
+  area_construida numeric(10, 2) check (area_construida >= 0), -- m² construídos (ou do apartamento)
   preco         bigint check (preco >= 0),          -- em reais; vazio = "Consulte"
   descricao     text check (char_length(descricao) <= 4000),
   fotos         text[] not null default '{}' check (cardinality(fotos) <= 30),
@@ -53,6 +54,11 @@ create table if not exists public.imoveis (
   criado_em     timestamptz not null default now(),
   atualizado_em timestamptz not null default now()
 );
+
+-- Bancos criados antes das metragens por tipo (12/11/2026) ganham as duas colunas novas aqui.
+-- Está também em supabase/migracoes/2026-11-12-metragens.sql.
+alter table public.imoveis add column if not exists area_terreno numeric(10, 2) check (area_terreno >= 0);
+alter table public.imoveis add column if not exists area_construida numeric(10, 2) check (area_construida >= 0);
 
 create index if not exists imoveis_vitrine_idx
   on public.imoveis (status, destaque desc, criado_em desc);

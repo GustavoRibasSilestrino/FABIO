@@ -66,8 +66,10 @@
 .adm-bloco + .adm-bloco { margin-top: 1.75rem; padding-top: 1.75rem; border-top: 1.5px solid rgba(16, 36, 28, 0.2); }
 .adm-bloco legend { margin-bottom: 0.875rem; padding: 0; font: 700 1.3125rem/1.2 var(--f-display); letter-spacing: -0.02em; }
 .adm-bloco .campo + .campo { margin-top: 1.125rem; }
+.adm-bloco .adm-grade .campo + .campo { margin-top: 0; } /* dentro de uma grade, quem espaça é o gap */
 .adm-grade { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.125rem; }
 .adm-grade__tudo { grid-column: 1 / -1; }
+.adm-grade--areas { margin-top: 1.125rem; }
 .adm-ajuda { margin-top: 0.5rem; font-size: 0.875rem; color: var(--tinta-suave); }
 .adm-ajuda:empty { display: none; }
 .adm-opcional { font-weight: 500; }
@@ -124,8 +126,7 @@
 @media (min-width: 720px) {
   .adm-item { grid-template-columns: 7rem minmax(0, 1fr) auto; align-items: center; }
   .adm-item__acoes { grid-column: auto; flex-direction: column; align-items: stretch; }
-  .adm-grade { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .adm-bloco:nth-of-type(2) .adm-grade { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .adm-grade--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 /* ---------- confirmação ---------- */

@@ -159,7 +159,7 @@
 
       <fieldset class="adm-bloco">
         <legend>Detalhes</legend>
-        <div class="adm-grade">
+        <div class="adm-grade adm-grade--3">
           <div class="campo">
             <label for="i-quartos">Quartos</label>
             <input class="entrada" id="i-quartos" type="number" inputmode="numeric" min="0" max="50" step="1">
@@ -172,12 +172,20 @@
             <label for="i-vagas">Vagas</label>
             <input class="entrada" id="i-vagas" type="number" inputmode="numeric" min="0" max="50" step="1">
           </div>
-          <div class="campo">
-            <label for="i-area">Área (m²)</label>
-            <input class="entrada" id="i-area" type="text" inputmode="decimal" autocomplete="off" placeholder="Ex.: 180">
+        </div>
+        <p class="adm-ajuda">Deixe em branco o que não se aplica.</p>
+
+        <div class="adm-grade adm-grade--areas">
+          <div class="campo" id="campo-area-terreno">
+            <label for="i-area-terreno" id="rot-area-terreno">Área do terreno (m²)</label>
+            <input class="entrada" id="i-area-terreno" type="text" inputmode="decimal" autocomplete="off" placeholder="Ex.: 300">
+          </div>
+          <div class="campo" id="campo-area-construida">
+            <label for="i-area-construida" id="rot-area-construida">Área construída (m²)</label>
+            <input class="entrada" id="i-area-construida" type="text" inputmode="decimal" autocomplete="off" placeholder="Ex.: 180">
           </div>
         </div>
-        <p class="adm-ajuda">Deixe em branco o que não se aplica (por exemplo, quartos de um terreno).</p>
+        <p class="adm-ajuda" id="ajuda-areas"></p>
       </fieldset>
 
       <fieldset class="adm-bloco">

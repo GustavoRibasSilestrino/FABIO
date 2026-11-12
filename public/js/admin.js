@@ -297,10 +297,28 @@
     if (selBairro.value === OUTRO) $('#i-bairro-outro').focus();
   });
 
+  /* metragens: casa e parecidos têm terreno e construção; apartamento e terreno têm uma só (js/comum.js) */
+  const AJUDA_AREAS = {
+    2: 'Terreno é o tamanho do lote; construída é a área do imóvel. Deixe em branco o que não souber.',
+    apartamento: 'Informe a área do apartamento.',
+    terreno: 'Informe o tamanho do terreno.'
+  };
+  const ajustaMedidas = () => {
+    const tipo = selTipo.value;
+    const usa = F.areasDoTipo(tipo);
+    $('#campo-area-terreno').hidden = !usa.includes('terreno');
+    $('#campo-area-construida').hidden = !usa.includes('construida');
+    $('#rot-area-terreno').textContent = F.rotuloArea(tipo, 'terreno');
+    $('#rot-area-construida').textContent = F.rotuloArea(tipo, 'construida');
+    $('#ajuda-areas').textContent = usa.length === 2 ? AJUDA_AREAS[2] : (AJUDA_AREAS[tipo] || '');
+  };
+  selTipo.addEventListener('change', ajustaMedidas);
+
   const campos = {
     tipo: selTipo, cidade: selCidade, bairro: selBairro, bairroOutro: $('#i-bairro-outro'), codigo: $('#i-codigo'),
     titulo: $('#i-titulo'),
-    quartos: $('#i-quartos'), banheiros: $('#i-banheiros'), vagas: $('#i-vagas'), area: $('#i-area'),
+    quartos: $('#i-quartos'), banheiros: $('#i-banheiros'), vagas: $('#i-vagas'),
+    areaTerreno: $('#i-area-terreno'), areaConstruida: $('#i-area-construida'),
     preco: $('#i-preco'), descricao: $('#i-descricao'), destaque: $('#i-destaque')
   };
   const radiosStatus = () => document.querySelectorAll('input[name="i-status"]');
@@ -339,7 +357,9 @@
     campos.quartos.value = novo || im.quartos == null ? '' : im.quartos;
     campos.banheiros.value = novo || im.banheiros == null ? '' : im.banheiros;
     campos.vagas.value = novo || im.vagas == null ? '' : im.vagas;
-    campos.area.value = novo || im.area == null ? '' : String(im.area).replace('.', ',');
+    campos.areaTerreno.value = novo || im.area_terreno == null ? '' : String(im.area_terreno).replace('.', ',');
+    campos.areaConstruida.value = novo || im.area_construida == null ? '' : String(im.area_construida).replace('.', ',');
+    ajustaMedidas();
     campos.preco.value = novo || im.preco == null ? '' : F.moeda(im.preco);
     campos.descricao.value = novo ? '' : (im.descricao || '');
     campos.destaque.checked = !novo && !!im.destaque;
@@ -467,7 +487,11 @@
 
   /* salvar */
   const numeroOuNulo = (campo, nome, { inteiro = false, max = 1e7 } = {}) => {
-    const bruto = campo.value.trim().replace(',', '.');
+    // aceita "145,5", "145.5" e "1.250,75" (ponto como separador de milhar)
+    const digitado = campo.value.trim();
+    const bruto = /^\d{1,3}(\.\d{3})+(,\d+)?$/.test(digitado)
+      ? digitado.replace(/\./g, '').replace(',', '.')
+      : digitado.replace(',', '.');
     if (bruto === '') return { valor: null };
     const n = Number(bruto);
     if (!Number.isFinite(n) || n < 0 || n > max || (inteiro && !Number.isInteger(n))) {
@@ -494,8 +518,13 @@
     const quartos = numeroOuNulo(campos.quartos, 'Quartos', { inteiro: true, max: 50 });
     const banheiros = numeroOuNulo(campos.banheiros, 'Banheiros', { inteiro: true, max: 50 });
     const vagas = numeroOuNulo(campos.vagas, 'Vagas', { inteiro: true, max: 50 });
-    const area = numeroOuNulo(campos.area, 'Área', { max: 99999999 });
-    for (const r of [quartos, banheiros, vagas, area]) if (r.erro) return r;
+    // só as metragens que o tipo usa são lidas; as outras ficam vazias (ex.: troca de casa para apartamento)
+    const usa = F.areasDoTipo(campos.tipo.value);
+    const areaTerreno = usa.includes('terreno')
+      ? numeroOuNulo(campos.areaTerreno, F.rotuloArea(campos.tipo.value, 'terreno').replace(' (m²)', ''), { max: 99999999 }) : { valor: null };
+    const areaConstruida = usa.includes('construida')
+      ? numeroOuNulo(campos.areaConstruida, F.rotuloArea(campos.tipo.value, 'construida').replace(' (m²)', ''), { max: 99999999 }) : { valor: null };
+    for (const r of [quartos, banheiros, vagas, areaTerreno, areaConstruida]) if (r.erro) return r;
 
     const digitos = campos.preco.value.replace(/\D/g, '');
     const status = [...radiosStatus()].find(r => r.checked).value;
@@ -508,7 +537,8 @@
         quartos: quartos.valor,
         banheiros: banheiros.valor,
         vagas: vagas.valor,
-        area: area.valor,
+        area_terreno: areaTerreno.valor,
+        area_construida: areaConstruida.valor,
         preco: digitos ? Number(digitos) : null,
         descricao: campos.descricao.value.trim() || null,
         destaque: campos.destaque.checked,

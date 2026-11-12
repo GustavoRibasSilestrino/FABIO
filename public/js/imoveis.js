@@ -8,7 +8,7 @@
   if (!F || !F.ativo || !grade) return;
 
   const SVG_NS = 'http://www.w3.org/2000/svg';
-  const CAMPOS = 'id,codigo,titulo,tipo,cidade,bairro,quartos,banheiros,vagas,area,preco,descricao,fotos,destaque,status';
+  const CAMPOS = 'id,codigo,titulo,tipo,cidade,bairro,quartos,banheiros,vagas,area_terreno,area_construida,preco,descricao,fotos,destaque,status';
   const porId = new Map();
 
   /* ---------- pequenas ajudas para montar HTML sem injetar texto ---------- */
@@ -40,7 +40,12 @@
     if (im.quartos > 0) l.push(['i-bed', F.plural(im.quartos, 'quarto', 'quartos')]);
     if (im.banheiros > 0) l.push(['i-bath', F.plural(im.banheiros, 'banheiro', 'banheiros')]);
     if (im.vagas > 0) l.push(['i-car', F.plural(im.vagas, 'vaga', 'vagas')]);
-    if (im.area > 0) l.push(['i-area', `${F.numero(im.area)} m²`]);
+    const usa = F.areasDoTipo(im.tipo);
+    if (usa.includes('terreno') && im.area_terreno > 0) l.push(['i-area', `${F.numero(im.area_terreno)} m² de terreno`]);
+    if (usa.includes('construida') && im.area_construida > 0) {
+      // apartamento tem uma metragem só: "68 m²"; nos demais, "180 m² construídos"
+      l.push(['i-area', im.tipo === 'apartamento' ? `${F.numero(im.area_construida)} m²` : `${F.numero(im.area_construida)} m² construídos`]);
+    }
     return l;
   };
 

@@ -30,6 +30,7 @@ public/
   assets/img/       fotos (hoje, imagens ilustrativas do Unsplash)
   assets/fonts/     Bricolage Grotesque e Hanken Grotesk (hospedadas aqui)
 supabase/schema.sql tabelas, regras de segurança e pasta de fotos do banco (rodar no SQL Editor)
+supabase/migracoes/ ajustes do banco feitos depois (cada arquivo roda uma vez no SQL Editor)
 vercel.json         publica a pasta public/ e define cabeçalhos de cache
 PRODUCT.md          contexto do produto (público, objetivo, restrições)
 DESIGN.md           sistema visual (cores, tipografia, componentes)
@@ -53,7 +54,8 @@ A coluna "Hoje" diz o que já é real (informado pelo Fábio) e o que ainda é *
 | Cidades e bairros da busca | `<select id="f-cidade">` (3 cidades) em `public/index.html`; o campo Bairro (`<select id="f-bairro">`) lista os bairros da cidade escolhida, vindos de `public/js/bairros.js`, mais os bairros dos imóveis já cadastrados. Cada imóvel tem cidade e bairro | cidades informadas pelo Fábio; bairros da base de CEPs dos Correios (195 em Santa Bárbara d’Oeste, 259 em Americana, 91 em Nova Odessa), sem os códigos de zoneamento |
 | Busca por código | linha "Código" no painel de busca do topo (`#busca-codigo`, `#f-codigo`), tratada em `public/js/main.js`; aceita "FB-101", "fb101" ou só "101" | funciona com o código de cada imóvel (gerado como FB-101, FB-102… ou escolhido no painel) |
 | Textos de apresentação, "como funciona" e promessas | `public/index.html` | texto provisório, confirmar com o Fábio |
-| Instagram e depoimentos reais | ainda não existem na página | a adicionar |
+| Redes sociais | links no contato e no rodapé de `public/index.html` (`#i-instagram`, `#i-facebook`) | Instagram `fabioribas.corretordeimoveis` e Facebook `FabioRibasMaciel` (reais) |
+| Depoimentos reais | ainda não existem na página | a adicionar |
 | Aviso "Imóveis de demonstração" e selos "Ilustrativo" | `.demo-nota` e `.selo--demo` | remover ao colocar imóveis reais |
 | Indexação no Google | `public/index.html` | `noindex` removido em 12/11/2026 (decisão do Gustavo), com `canonical` e `og:url` apontando para `https://fabioribasimoveis.com.br/`. O conteúdo ainda tem imóveis e fotos de exemplo |
 | Domínio | Vercel (projeto `fabio-imoveis`) e DNS no Registro.br; `vercel.json` redireciona `www` para o domínio principal | `fabioribasimoveis.com.br` |
@@ -71,6 +73,7 @@ O Fábio entra em `https://fabioribasimoveis.com.br/admin` com e-mail e senha e 
 - **Senha esquecida:** o link "Esqueci minha senha" do painel envia um e-mail de recuperação. Os endereços `https://fabioribasimoveis.com.br/admin` e `https://fabio-imoveis.vercel.app/admin` precisam estar em Authentication > URL Configuration > Redirect URLs.
 
 - **Bairro:** no cadastro, o bairro é escolhido numa lista que muda com a cidade. Se faltar, "Outro bairro (digitar)" aceita o nome e ele passa a aparecer também na busca do site.
+- **Metragens:** casa, casa em condomínio, sobrado, chácara, sítio e imóvel comercial têm "área do terreno" e "área construída"; apartamento tem só a "área do apartamento"; terreno tem só a "área do terreno". O painel mostra só os campos do tipo escolhido (regra em `AREAS`, `public/js/comum.js`). No banco são as colunas `area_terreno` e `area_construida` (`supabase/migracoes/2026-11-12-metragens.sql`).
 - **Código:** o painel gera FB-101, FB-102… Se preferir, o Fábio pode digitar o próprio código (letras, números e hífen, até 20 caracteres; não pode repetir). É o que o cliente usa em "Buscar código".
 
 Os valores aceitos em `tipo` são: casa, casa-condominio, sobrado, apartamento, terreno, chacara, sitio e comercial. As cidades e os tipos exibidos estão em `public/js/comum.js`; para incluir uma cidade nova, edite a lista `CIDADES` ali e o `<select id="f-cidade">` de `public/index.html`.
