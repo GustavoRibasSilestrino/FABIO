@@ -129,7 +129,16 @@ p { text-wrap: pretty; }
 .topo__in { display: flex; align-items: center; gap: 1.25rem; min-height: var(--topo-h); }
 
 .marca { display: inline-flex; align-items: center; gap: 0.75rem; text-decoration: none; }
-.marca__arco { width: 2.375rem; height: 2.375rem; }
+/* o logotipo do Fábio (transparente) vai sobre um arco claro, para o preto e o dourado ficarem legíveis */
+.marca__logo {
+  flex: none; display: grid; place-items: center; width: 3.25rem; height: 3.25rem;
+  background: var(--concreto-claro); border-radius: 62.4375rem 62.4375rem 0.25rem 0.25rem; overflow: hidden;
+}
+.marca__logo img { width: 100%; height: 100%; object-fit: contain; }
+/* rodapé: o logotipo inteiro (nome e CRECI já fazem parte dele) */
+.rodape__marca .marca__logo { width: 9rem; height: 9rem; }
+.rodape__marca .marca__txt { display: none; }
+@media (max-width: 359px) { .topo .marca__txt { display: none; } }
 .marca__txt { display: grid; line-height: 1; }
 .marca__txt strong { font: 700 clamp(1.25rem, 5.4vw, 1.5rem)/1 var(--f-display); letter-spacing: -0.03em; white-space: nowrap; }
 .marca__txt small { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; margin-top: 0.25rem; color: var(--menta); }
@@ -356,9 +365,16 @@ p { text-wrap: pretty; }
 /* ---------- Sobre ---------- */
 .sobre { background: var(--concreto); }
 .sobre__in { display: grid; grid-template-columns: 1fr; gap: 2.5rem clamp(2rem, 6vw, 6rem); align-items: center; }
-.sobre__retrato { max-width: 26.25rem; }
-.sobre__retrato svg { width: 100%; height: auto; }
-.sobre__legenda { margin-top: 0.625rem; font-size: 0.875rem; font-weight: 600; color: var(--tinta-suave); }
+/* retrato: a foto em arco, na frente de dois arcos de cor chapada (mesma lógica do topo) */
+.sobre__retrato { position: relative; width: 100%; max-width: 30rem; margin-inline: auto; align-self: start; }
+.retrato__foto {
+  position: relative; z-index: 2; width: 72%; margin-left: 14%; aspect-ratio: 3 / 4;
+  border-radius: 62.4375rem 62.4375rem 0 0; overflow: hidden; background: #fff;
+}
+.retrato__foto img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; }
+.ra { position: absolute; bottom: 0; border-radius: 62.4375rem 62.4375rem 0 0; }
+.ra--jardim { left: 0; width: 40%; height: 58%; background: var(--jardim); }
+.ra--acafrao { right: 0; width: 46%; height: 82%; background: var(--acafrao); }
 .sobre__copy h2 { font-size: clamp(2rem, 1.1rem + 3vw, 3.5rem); font-weight: 800; letter-spacing: -0.035em; max-width: 12em; }
 .sobre__copy p { margin-top: 1.25rem; max-width: 34em; font-size: 1.125rem; }
 .sobre__creci { font-weight: 700; margin-top: 1.5rem; margin-bottom: 1.75rem; }
