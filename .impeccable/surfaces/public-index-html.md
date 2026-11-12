@@ -12,6 +12,13 @@ primary_target: "public/index.html"
 related_targets: ["public/css/style.css","public/js/main.js"]
 ---
 
+---
+version: 1
+slug: "public-index-html"
+primary_target: "public/index.html"
+related_targets: ["public/css/style.css","public/js/main.js"]
+---
+
 # Surface brief: public/index.html (Fábio, corretor de imóveis, Santa Bárbara d'Oeste)
 
 Mode: Persuade for the first screen, then Experience (portfolio of imóveis) for the rest. One long page, pt-BR, mobile-first.
@@ -32,7 +39,7 @@ OWN-WORLD: Drenched jardim green (#0D5C41) hero, concreto grey-green ground (#E4
 
 STORY: The visitor sees a house they want, a local person they can trust, and one saffron button to talk to Fábio. They believe he is direct and close by, and they tap WhatsApp or filter the imóveis.
 
-FIRST VIEWPORT: Emerald field, 100svh. Left, spanning six of twelve columns: H1 "Encontre a casa certa em Santa Bárbara d'Oeste.", a short subhead, the saffron WhatsApp button beside a text link to sell, and beneath them the search panel as the screen's highlight (title "Qual imóvel você procura?", tipo, bairro, quartos, a full-width Buscar button). Right: three layered flat arches (concreto, cobalt, then the hero photo in the tallest, front arch) and a saffron sun, standing on a concrete ground line at the hero's foot. On phones (<=639px) the panel is full-bleed right after the H1, with a saffron Buscar button; the WhatsApp CTA becomes a white ghost button under it and the arches follow below. The whole page scales with a fluid root font-size.
+FIRST VIEWPORT: Emerald field, 100svh. Left, spanning six of twelve columns: H1 "Encontre o seu imóvel ideal.", a short subhead, the saffron WhatsApp button beside a text link to sell, and beneath them the search panel as the screen's highlight (title "Qual imóvel você procura?", tipo, bairro, quartos, a full-width Buscar button). Right: three layered flat arches (concreto, cobalt, then the hero photo in the tallest, front arch) and a saffron sun, standing on a concrete ground line at the hero's foot. On phones (<=639px) the panel is full-bleed right after the H1, with a saffron Buscar button; the WhatsApp CTA becomes a white ghost button under it and the arches follow below. The whole page scales with a fluid root font-size.
 
 FORM: Jardim Moderno (Brazilian tropical modernism: Burle Marx colour fields, Niemeyer curves), candidate 6 of 7 on my ordered list, assigned by the roll and kept by the user. seed:bdd38d56d402b057. Raises: layered flat colour for depth (from Papercut Łowicz), one label grid ruling every listing (from Sneaker Box Stacks), saturated fields owning whole regions (from Du Bois Data Portraits).
 
