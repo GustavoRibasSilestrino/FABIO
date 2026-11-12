@@ -75,14 +75,12 @@
   };
 
   /* ---------- cartão ---------- */
-  const RATIOS = ['45', '11', '45', '45', '11', '11'];
-
   const cartao = (im, i) => {
     const fotos = fotosDe(im);
     const titulo = tituloDe(im);
     const curva = i % 2 === 0 ? 'tl' : 'tr';
 
-    const foto = h('div', { class: `imovel__foto imovel__foto--${curva} ratio-${RATIOS[i % RATIOS.length]}`, 'data-abrir': im.id },
+    const foto = h('div', { class: `imovel__foto imovel__foto--${curva}`, 'data-abrir': im.id },
       fotos.length
         ? h('img', { src: F.fotoUrl(fotos[0], true), width: 900, height: 900, loading: 'lazy', decoding: 'async', alt: `Foto de ${titulo}` })
         : h('span', { class: 'imovel__sem-foto', text: 'Fotos em breve' }),

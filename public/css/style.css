@@ -135,7 +135,16 @@ p { text-wrap: pretty; }
 /* rodapé: o logotipo inteiro (nome e CRECI já fazem parte dele) */
 .rodape__marca .marca__logo { height: 10rem; }
 .rodape__marca .marca__txt { display: none; }
-@media (max-width: 359px) { .topo .marca__txt { display: none; } }
+/* o logotipo já traz o nome e o CRECI: o texto ao lado só aparece onde sobra espaço para WhatsApp, Instagram e Facebook */
+@media (max-width: 1099px) { .topo .marca__txt { display: none; } }
+.topo__redes { display: flex; align-items: center; gap: 0.5rem; }
+.topo__rede {
+  display: inline-grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.55); color: #fff;
+  transition: background-color 0.25s var(--ease), border-color 0.25s var(--ease), color 0.25s var(--ease);
+}
+.topo__rede:hover { background: var(--acafrao); border-color: var(--acafrao); color: var(--tinta); }
+.topo__rede .i { width: 1.375rem; height: 1.375rem; }
 .marca__txt { display: grid; line-height: 1; }
 .marca__txt strong { font: 700 clamp(1.25rem, 5.4vw, 1.5rem)/1 var(--f-display); letter-spacing: -0.03em; white-space: nowrap; }
 .marca__txt small { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; margin-top: 0.25rem; color: var(--menta); }
@@ -293,8 +302,9 @@ p { text-wrap: pretty; }
 .resultado { margin: 2.5rem 0 1.5rem; font-weight: 700; color: var(--tinta-suave); }
 .resultado:focus { outline: none; }
 
-.grade { display: grid; grid-template-columns: 1fr; gap: 3.5rem 2rem; align-items: start; }
-.imovel { min-width: 0; }
+/* todos os cartões com a mesma proporção de foto, a mesma altura por linha e o preço sempre na base */
+.grade { display: grid; grid-template-columns: 1fr; gap: 3.5rem 2rem; align-items: stretch; }
+.imovel { min-width: 0; display: flex; flex-direction: column; }
 .imovel[hidden] { display: none; }
 .imovel.is-entrando { animation: entra 0.7s var(--ease) both; animation-delay: calc(var(--n, 0) * 70ms); }
 /* imóvel encontrado pela busca de código */
@@ -302,11 +312,9 @@ p { text-wrap: pretty; }
 @keyframes entra { from { opacity: 0; transform: translateY(1.5rem); } to { opacity: 1; transform: none; } }
 
 .imovel__foto {
-  position: relative; overflow: hidden; background: var(--jardim-fundo);
+  position: relative; overflow: hidden; background: var(--jardim-fundo); flex: none; aspect-ratio: 4 / 3;
   transition: border-radius 0.7s var(--ease);
 }
-.ratio-45 { aspect-ratio: 4 / 5; }
-.ratio-11 { aspect-ratio: 1 / 1; }
 .imovel__foto--tl { border-radius: var(--curva) 0.25rem 0.25rem 0.25rem; }
 .imovel__foto--tr { border-radius: 0.25rem var(--curva) 0.25rem 0.25rem; }
 .imovel__foto img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease); }
@@ -320,6 +328,8 @@ p { text-wrap: pretty; }
 }
 .selo--demo { left: 0.875rem; bottom: 0.875rem; background: rgba(16, 36, 28, 0.82); color: #fff; }
 .selo--destaque { right: 0.875rem; top: 0.875rem; background: var(--acafrao); color: var(--tinta); }
+/* na foto com a curva grande no canto de cima à direita, o selo vai para a esquerda para não ser cortado */
+.imovel__foto--tr .selo--destaque { right: auto; left: 0.875rem; }
 
 /* a etiqueta: a mesma grade rege todo imóvel */
 .etiqueta {
@@ -335,7 +345,7 @@ p { text-wrap: pretty; }
 .specs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem 1rem; margin-top: 0.875rem; color: var(--tinta-suave); font-size: 0.9375rem; font-weight: 500; }
 .specs li { display: inline-flex; align-items: center; gap: 0.4375rem; }
 .specs .i { width: 1.1875rem; height: 1.1875rem; }
-.imovel__pe { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem 1rem; margin-top: 1.25rem; }
+.imovel__pe { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem 1rem; margin-top: auto; padding-top: 1.25rem; }
 .preco { font: 800 clamp(1.7rem, 1.4rem + 0.8vw, 2.125rem)/1 var(--f-display); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
 .preco span { font-size: 1rem; font-weight: 600; letter-spacing: 0; color: var(--tinta-suave); margin-right: 2px; }
 
@@ -569,7 +579,6 @@ body:has(dialog.galeria[open]) { overflow: hidden; }
 
 @media (min-width: 1024px) {
   .grade { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4.5rem 2.5rem; }
-  .imovel[data-col="1"] { margin-top: 4.5rem; }
   .mosaico { grid-template-columns: repeat(12, 1fr); grid-template-rows: repeat(2, minmax(0, 18.75rem)); gap: 1.25rem; }
   .tile--a { grid-column: 1 / 5; grid-row: 1 / 3; }
   .tile--b { grid-column: 5 / 13; grid-row: 1; }
@@ -620,6 +629,7 @@ body:has(dialog.galeria[open]) { overflow: hidden; }
 @media (max-width: 639px) {
   .topo__wa span { display: none; }
   .topo__wa { padding: 0; width: 3rem; min-height: 3rem; border-radius: 50%; }
+  .topo__in { gap: 0.75rem; }
 
   /* celular: a busca é o protagonista. Sangra até as bordas, campos e botão grandes, vem antes de tudo */
   .hero__in { padding-top: 1.25rem; }
