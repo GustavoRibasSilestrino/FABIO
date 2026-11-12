@@ -157,9 +157,10 @@
     const io = new IntersectionObserver(entries => {
       entries.forEach(en => { en.isIntersecting ? vistos.add(en.target) : vistos.delete(en.target); });
       atualizaFlutuante();
-    }, { threshold: 0.4 });
-    // some enquanto qualquer botão de WhatsApp da página já está na tela, para nunca cobri-lo
+    }, { threshold: 0.2 });
+    // some enquanto a busca ou qualquer botão de WhatsApp da página já está na tela, para nunca cobri-los
     $$('main a[data-wa]').forEach(el => io.observe(el));
+    io.observe($('#busca'));
     io.observe($('#contato'));
   } else {
     flutuante.classList.remove('is-oculto');
