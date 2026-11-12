@@ -41,13 +41,13 @@ A coluna "Hoje" diz o que já é real (informado pelo Fábio) e o que ainda é *
 | Fotos do topo, dos imóveis e dos ambientes | `public/assets/img/` (mantenha os nomes ou ajuste os `src` no HTML) | Unsplash |
 | Foto do Fábio | seção `#sobre` em `public/index.html` e `public/assets/img/fabio-ribas.jpg` | foto real (enviada pelo Fábio) |
 | Imóveis (código, bairro, quartos, preço, texto) | cartões `.imovel` em `public/index.html` | 6 exemplos |
-| Cidades e bairros da busca | `<select id="f-cidade">` e `<select id="f-bairro">` em `public/index.html` (cada bairro tem `data-cidade`; cada imóvel tem `data-cidade`) | Santa Bárbara d’Oeste, Americana e Nova Odessa (informadas pelo Fábio); bairros de exemplo |
+| Cidades e bairro da busca | `<select id="f-cidade">` (lista de cidades) e `<input id="f-bairro">` (o visitante digita o bairro) em `public/index.html`; a busca compara o texto com o `data-bairro` de cada imóvel, sem acento e sem maiúsculas; cada imóvel tem `data-cidade` | cidades informadas pelo Fábio; bairros dos cartões são de exemplo |
 | Textos de apresentação, "como funciona" e promessas | `public/index.html` | texto provisório, confirmar com o Fábio |
 | Instagram e depoimentos reais | ainda não existem na página | a adicionar |
 | Aviso "Imóveis de demonstração" e selos "Ilustrativo" | `.demo-nota` e `.selo--demo` | remover ao colocar imóveis reais |
 | `noindex` | `<meta name="robots">` em `public/index.html` | **remover** quando o site for ao ar de verdade, para o Google indexar |
 
-Para um novo imóvel, copie um bloco `<article class="imovel" …>` e ajuste `data-tipo`, `data-bairro` e `data-quartos` (a busca usa esses três campos), a foto e os textos.
+Para um novo imóvel, copie um bloco `<article class="imovel" …>` e ajuste `data-cidade`, `data-tipo`, `data-bairro` e `data-quartos` (a busca usa esses quatro campos), a foto e os textos.
 
 ## Publicação
 

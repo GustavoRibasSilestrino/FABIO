@@ -44,7 +44,7 @@
   const form = $('#busca');
   const selCidade = $('#f-cidade');
   const selTipo = $('#f-tipo');
-  const selBairro = $('#f-bairro');
+  const campoBairro = $('#f-bairro');
   const selQuartos = $('#f-quartos');
   const chips = $$('.chip');
   const cards = $$('.imovel');
@@ -53,21 +53,13 @@
 
   const state = { cidade: selCidade.value, tipo: '', bairro: '', quartos: 0 };
 
-  // os bairros listados dependem da cidade escolhida
-  const ajustaBairros = () => {
-    const cidade = selCidade.value;
-    Array.from(selBairro.options).forEach(op => {
-      if (!op.value) return;
-      const fora = Boolean(cidade) && op.dataset.cidade !== cidade;
-      op.disabled = fora;
-      op.hidden = fora;
-    });
-    const atual = selBairro.selectedOptions[0];
-    if (atual && atual.disabled) selBairro.value = '';
-  };
+  // o bairro é digitado: comparamos sem acento, sem maiúsculas e sem pontuação ("vila linopolis" acha "Vila Linópolis")
+  const normaliza = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+
   // sem cidade escolhida, o campo mostra só a orientação "Escolha a cidade" (em tom mais suave)
   const marcaCidade = () => selCidade.classList.toggle('is-vazio', !selCidade.value);
-  selCidade.addEventListener('change', () => { ajustaBairros(); marcaCidade(); });
+  selCidade.addEventListener('change', marcaCidade);
 
   const render = (animate) => {
     let shown = 0;
@@ -76,7 +68,7 @@
       const ok =
         (!state.cidade || d.cidade === state.cidade) &&
         (!state.tipo || d.tipo === state.tipo) &&
-        (!state.bairro || d.bairro === state.bairro) &&
+        (!state.bairro || normaliza(d.bairro).includes(state.bairro)) &&
         (!state.quartos || Number(d.quartos) >= state.quartos);
       card.hidden = !ok;
       card.classList.remove('is-entrando');
@@ -98,7 +90,7 @@
   const readSelects = () => {
     state.cidade = selCidade.value;
     state.tipo = selTipo.value;
-    state.bairro = selBairro.value;
+    state.bairro = normaliza(campoBairro.value);
     state.quartos = Number(selQuartos.value);
   };
 
@@ -120,12 +112,12 @@
   $('#limpar').addEventListener('click', () => {
     selCidade.selectedIndex = 0;
     state.cidade = selCidade.value; state.tipo = ''; state.bairro = ''; state.quartos = 0;
-    selTipo.value = ''; selBairro.value = ''; selQuartos.value = '0';
-    ajustaBairros(); marcaCidade();
+    selTipo.value = ''; campoBairro.value = ''; selQuartos.value = '0';
+    marcaCidade();
     render(true);
   });
 
-  ajustaBairros(); marcaCidade();
+  marcaCidade();
   render(false);
 
   /* ---------- Formulário de contato → WhatsApp ---------- */
