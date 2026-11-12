@@ -138,11 +138,13 @@
               <select id="i-bairro" required></select>
               <svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg>
             </div>
-            <p class="adm-ajuda">A lista muda conforme a cidade. Se o bairro não estiver nela, escolha “Outro bairro” e digite o nome: ele passa a aparecer na busca do site.</p>
+            <p class="adm-ajuda">A lista traz todos os bairros da cidade escolhida. No site, a busca mostra só os bairros que têm imóvel disponível.</p>
+            <button class="adm-link adm-link--texto adm-link--inicio" type="button" id="btn-bairro-novo">Não encontrou o bairro? Incluir outro</button>
           </div>
           <div class="campo adm-grade__tudo" id="campo-bairro-outro" hidden>
-            <label for="i-bairro-outro">Nome do bairro</label>
-            <input class="entrada" id="i-bairro-outro" type="text" autocomplete="off" maxlength="80">
+            <label for="i-bairro-outro">Nome do bairro a incluir</label>
+            <input class="entrada" id="i-bairro-outro" type="text" autocomplete="off" maxlength="80" placeholder="Ex.: Jardim Santa Inês">
+            <p class="adm-ajuda">Ele passa a fazer parte da lista desta cidade e a aparecer na busca do site.</p>
           </div>
           <div class="campo adm-grade__tudo">
             <label for="i-codigo">Código do imóvel <span class="adm-opcional">(opcional)</span></label>

@@ -286,8 +286,8 @@
     const nomes = [...lista.values()].sort((a, b) => a.localeCompare(b, 'pt-BR'));
     selBairro.replaceChildren(
       h('option', { value: '', text: 'Escolha o bairro' }),
-      ...nomes.map(n => h('option', { value: n, text: n })),
-      h('option', { value: OUTRO, text: 'Outro bairro (digitar)' }));
+      h('option', { value: OUTRO, text: '+ Não encontrei: incluir outro bairro' }),
+      ...nomes.map(n => h('option', { value: n, text: n })));
     selBairro.value = atual ? lista.get(normaliza(atual)) : '';
     mostraOutro();
   };
@@ -295,6 +295,12 @@
   selBairro.addEventListener('change', () => {
     mostraOutro();
     if (selBairro.value === OUTRO) $('#i-bairro-outro').focus();
+  });
+  // atalho visível para quem não acha o bairro na lista
+  $('#btn-bairro-novo').addEventListener('click', () => {
+    selBairro.value = OUTRO;
+    mostraOutro();
+    $('#i-bairro-outro').focus();
   });
 
   /* metragens: casa e parecidos têm terreno e construção; apartamento e terreno têm uma só (js/comum.js) */

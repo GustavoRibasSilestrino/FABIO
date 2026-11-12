@@ -26,6 +26,7 @@
 .adm-topo :focus-visible { outline-color: var(--acafrao); }
 .adm-link--texto { justify-content: center; color: var(--tinta); text-decoration-color: var(--tinta-suave); }
 .adm-link--texto:hover { text-decoration-color: var(--jardim); }
+.adm-link--inicio { justify-content: flex-start; margin-top: 0.25rem; }
 
 /* ---------- miolo ---------- */
 .adm-main {

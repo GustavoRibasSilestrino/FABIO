@@ -66,17 +66,15 @@
   const marcaCidade = () => selCidade.classList.toggle('is-vazio', !selCidade.value);
   const marcaBairro = () => selBairro.classList.toggle('is-vazio', !selBairro.value);
 
-  /* Bairros: ao escolher a cidade, o campo lista todos os bairros dela (js/bairros.js) mais qualquer
-     bairro de imóvel já cadastrado que ainda não esteja na lista. */
-  const BAIRROS = (window.FABIO && window.FABIO.BAIRROS) || {};
+  /* Bairros: ao escolher a cidade, o campo lista só os bairros que têm imóvel disponível agora
+     (cadastrado e ainda não vendido). A lista completa de bairros fica só no painel (js/bairros.js). */
   const nomeBairroDoCartao = c => {
     const dd = c.querySelector('.etiqueta div:last-child dd');
     return dd ? dd.textContent.trim() : c.dataset.bairro;
   };
   const bairrosDaCidade = cidade => {
     const lista = new Map();
-    (BAIRROS[cidade] || []).forEach(n => lista.set(normaliza(n), n));
-    cards.filter(c => c.dataset.cidade === cidade).forEach(c => {
+    cards.filter(c => c.dataset.cidade === cidade && c.dataset.status !== 'vendido').forEach(c => {
       const n = nomeBairroDoCartao(c);
       if (n && !lista.has(normaliza(n))) lista.set(normaliza(n), n);
     });
@@ -90,10 +88,16 @@
       selBairro.append(new Option('Escolha a cidade primeiro', ''));
       selBairro.disabled = true;
     } else {
-      selBairro.append(new Option('Todos os bairros', ''));
-      bairrosDaCidade(cidade).forEach(n => selBairro.append(new Option(n, n)));
-      selBairro.disabled = false;
-      if (atual && [...selBairro.options].some(o => o.value === atual)) selBairro.value = atual;
+      const bairros = bairrosDaCidade(cidade);
+      if (!bairros.length) {
+        selBairro.append(new Option('Sem imóveis disponíveis nesta cidade', ''));
+        selBairro.disabled = true;
+      } else {
+        selBairro.append(new Option('Todos os bairros', ''));
+        bairros.forEach(n => selBairro.append(new Option(n, n)));
+        selBairro.disabled = false;
+        if (atual && [...selBairro.options].some(o => o.value === atual)) selBairro.value = atual;
+      }
     }
     marcaBairro();
   };

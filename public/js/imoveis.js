@@ -93,7 +93,7 @@
 
     return h('article', {
       class: 'imovel' + (im.status === 'vendido' ? ' imovel--vendido' : ''),
-      'data-id': im.id, 'data-codigo': im.codigo, 'data-cidade': im.cidade, 'data-tipo': im.tipo,
+      'data-id': im.id, 'data-status': im.status, 'data-codigo': im.codigo, 'data-cidade': im.cidade, 'data-tipo': im.tipo,
       'data-bairro': im.bairro, 'data-quartos': im.quartos || 0
     },
       foto,
