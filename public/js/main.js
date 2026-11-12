@@ -65,7 +65,9 @@
     const atual = selBairro.selectedOptions[0];
     if (atual && atual.disabled) selBairro.value = '';
   };
-  selCidade.addEventListener('change', ajustaBairros);
+  // sem cidade escolhida, o campo mostra só a orientação "Escolha a cidade" (em tom mais suave)
+  const marcaCidade = () => selCidade.classList.toggle('is-vazio', !selCidade.value);
+  selCidade.addEventListener('change', () => { ajustaBairros(); marcaCidade(); });
 
   const render = (animate) => {
     let shown = 0;
@@ -119,11 +121,11 @@
     selCidade.selectedIndex = 0;
     state.cidade = selCidade.value; state.tipo = ''; state.bairro = ''; state.quartos = 0;
     selTipo.value = ''; selBairro.value = ''; selQuartos.value = '0';
-    ajustaBairros();
+    ajustaBairros(); marcaCidade();
     render(true);
   });
 
-  ajustaBairros();
+  ajustaBairros(); marcaCidade();
   render(false);
 
   /* ---------- Formulário de contato → WhatsApp ---------- */
