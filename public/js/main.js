@@ -64,55 +64,47 @@
 
   // sem cidade escolhida, o campo mostra só a orientação "Escolha a cidade" (em tom mais suave)
   const marcaCidade = () => selCidade.classList.toggle('is-vazio', !selCidade.value);
-  const marcaTipo = () => selTipo.classList.toggle('is-vazio', !selTipo.value);
   const marcaBairro = () => selBairro.classList.toggle('is-vazio', !selBairro.value);
 
-  /* Bairros: só depois de escolher a cidade E o tipo de imóvel, o campo lista os bairros daquela cidade
-     que têm imóvel cadastrado e disponível (não vendido) daquele tipo. Cada cidade tem a sua lista. Não
-     existe "todos os bairros": é preciso escolher um. A lista completa de bairros fica só no painel
-     (js/bairros.js), para o cadastro. */
+  /* Bairros (mesmo fluxo do Menso: cidade → bairro → tipo → quartos): ao escolher a cidade, o campo lista
+     TODOS os bairros cadastrados dela (js/bairros.js), mais qualquer bairro de imóvel cadastrado que não
+     esteja na lista. Cada cidade tem a sua lista. Não existe "todos os bairros": é preciso escolher um.
+     Se não houver imóvel no bairro, a busca mostra o aviso com o botão de WhatsApp. */
+  const BAIRROS = (window.FABIO && window.FABIO.BAIRROS) || {};
   const nomeBairroDoCartao = c => {
     const dd = c.querySelector('.etiqueta div:last-child dd');
     return dd ? dd.textContent.trim() : c.dataset.bairro;
   };
-  const bairrosDisponiveis = (cidade, tipo) => {
+  const bairrosDaCidade = cidade => {
     const lista = new Map();
-    cards.filter(c => c.dataset.cidade === cidade && c.dataset.tipo === tipo && c.dataset.status !== 'vendido').forEach(c => {
+    (BAIRROS[cidade] || []).forEach(n => lista.set(normaliza(n), n));
+    cards.filter(c => c.dataset.cidade === cidade).forEach(c => {
       const n = nomeBairroDoCartao(c);
       if (n && !lista.has(normaliza(n))) lista.set(normaliza(n), n);
     });
     return [...lista.values()].sort((a, b) => a.localeCompare(b, 'pt-BR'));
   };
-  // o campo fica desligado (com a orientação no lugar do nome) até haver cidade, tipo e ao menos um bairro
+  // o campo fica desligado (com a orientação no lugar do nome) até a cidade ser escolhida
   const preencheBairros = manter => {
     const cidade = selCidade.value;
-    const tipo = selTipo.value;
     const atual = manter ? selBairro.value : '';
     selBairro.replaceChildren();
-    selBairro.disabled = true;
     if (!cidade) {
       selBairro.append(new Option('Escolha a cidade primeiro', ''));
-    } else if (!tipo) {
-      selBairro.append(new Option('Escolha o tipo de imóvel primeiro', ''));
+      selBairro.disabled = true;
     } else {
-      const bairros = bairrosDisponiveis(cidade, tipo);
-      if (!bairros.length) {
-        const plural = ((window.FABIO && window.FABIO.TIPOS_PLURAL) || {})[tipo] || 'imóveis';
-        selBairro.append(new Option(`Sem ${plural.toLowerCase()} disponíveis nesta cidade`, ''));
-      } else {
-        const orienta = new Option('Escolha o bairro', '');
-        orienta.disabled = true;
-        orienta.selected = true;
-        selBairro.append(orienta);
-        bairros.forEach(n => selBairro.append(new Option(n, n)));
-        selBairro.disabled = false;
-        if (atual && bairros.includes(atual)) selBairro.value = atual;
-      }
+      const orienta = new Option('Escolha o bairro', '');
+      orienta.disabled = true;
+      orienta.selected = true;
+      selBairro.append(orienta);
+      const bairros = bairrosDaCidade(cidade);
+      bairros.forEach(n => selBairro.append(new Option(n, n)));
+      selBairro.disabled = false;
+      if (atual && bairros.includes(atual)) selBairro.value = atual;
     }
     marcaBairro();
   };
   selCidade.addEventListener('change', () => { marcaCidade(); preencheBairros(false); erroBusca(''); });
-  selTipo.addEventListener('change', () => { marcaTipo(); preencheBairros(false); erroBusca(''); });
   selBairro.addEventListener('change', () => { marcaBairro(); erroBusca(''); });
 
   const msgBusca = $('#busca-msg');
@@ -155,10 +147,9 @@
 
   form.addEventListener('submit', e => {
     e.preventDefault();
-    // a busca segue a ordem cidade → tipo → bairro; sem bairro disponível para o tipo, a busca roda e mostra o aviso de "nenhum imóvel"
+    // cidade e bairro são obrigatórios; tipo e quartos são opcionais ("Todos os tipos", "Qualquer")
     const falta = !selCidade.value ? [selCidade, 'Escolha a cidade.']
-      : !selTipo.value ? [selTipo, 'Escolha o tipo de imóvel.']
-        : (!selBairro.disabled && !selBairro.value) ? [selBairro, 'Escolha o bairro.'] : null;
+      : !selBairro.value ? [selBairro, 'Escolha o bairro.'] : null;
     if (falta) { erroBusca(falta[1]); falta[0].focus(); return; }
     erroBusca('');
     readSelects();
@@ -173,8 +164,6 @@
     if (!chip) return;
     state.tipo = chip.dataset.tipo;
     selTipo.value = state.tipo;
-    marcaTipo();
-    preencheBairros(false);
     render(true);
   });
 
@@ -183,7 +172,6 @@
     state.cidade = selCidade.value; state.tipo = ''; state.bairro = ''; state.quartos = 0;
     selTipo.value = ''; selQuartos.value = '0';
     marcaCidade();
-    marcaTipo();
     preencheBairros(false);
     erroBusca('');
   };
@@ -233,7 +221,6 @@
   });
 
   marcaCidade();
-  marcaTipo();
   marcaCodigos();
   preencheBairros(false);
   render(false);
