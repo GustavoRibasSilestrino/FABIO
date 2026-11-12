@@ -301,6 +301,24 @@
     render(false);
   });
 
+  /* ---------- Primeira tela: nada importante fica abaixo da dobra ---------- */
+  // No computador, a faixa "CRECI · Compra, venda e avaliação" só aparece se a primeira tela inteira cabe na janela.
+  const heroEl = $('.hero');
+  const provaEl = $('.hero__prova');
+  const ajustaPrimeiraTela = () => {
+    if (!heroEl || !provaEl) return;
+    provaEl.classList.remove('is-oculta');
+    if (!window.matchMedia('(min-width: 900px)').matches) return; // no celular a ordem da página é outra
+    const fim = heroEl.getBoundingClientRect().bottom + window.scrollY;
+    if (fim > window.innerHeight + 1) provaEl.classList.add('is-oculta');
+  };
+  let esperaAjuste = 0;
+  const agendaAjuste = () => { cancelAnimationFrame(esperaAjuste); esperaAjuste = requestAnimationFrame(ajustaPrimeiraTela); };
+  ajustaPrimeiraTela();
+  window.addEventListener('resize', agendaAjuste);
+  window.addEventListener('load', agendaAjuste);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(agendaAjuste);
+
   /* ---------- Revelação ao rolar ---------- */
   if ('IntersectionObserver' in window && !reduceMotion) {
     document.documentElement.classList.add('reveal-ready');

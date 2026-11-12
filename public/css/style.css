@@ -47,8 +47,10 @@
 * { margin: 0; }
 
 html {
-  /* a página inteira cresce junto com telas grandes (rem), respeitando a fonte escolhida pelo usuário */
-  font-size: clamp(100%, 0.625vw + 0.375rem, 187.5%);
+  /* a página inteira cresce junto com telas grandes (rem), respeitando a fonte escolhida pelo usuário.
+     O crescimento também é limitado pela altura (1.6vh): numa janela larga e baixa, a primeira tela
+     não pode ficar maior que a janela. */
+  font-size: clamp(100%, min(0.625vw + 0.375rem, 1.6vh), 187.5%);
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--topo-h) + 0.75rem);
   -webkit-text-size-adjust: 100%;
@@ -178,7 +180,7 @@ p { text-wrap: pretty; }
   gap: clamp(1.5rem, 4vw, 4.5rem); align-items: end;
   min-height: calc(100svh - var(--topo-h) - 1rem);
 }
-.hero__copy { align-self: center; padding-block: clamp(1.75rem, 5vh, 4rem); min-width: 0; }
+.hero__copy { align-self: center; padding-block: 1rem; padding-block: clamp(0.75rem, 2.6vh, 3rem); min-width: 0; }
 
 .hero h1 {
   font-size: clamp(2.6rem, min(1.1rem + 5vw, 7.8vh), 5.4rem);
@@ -186,15 +188,15 @@ p { text-wrap: pretty; }
   max-width: 13.5em;
 }
 .hero__sub {
-  margin-top: clamp(1rem, 2.4vh, 1.75rem); max-width: 33em; color: var(--menta);
+  margin-top: clamp(0.75rem, 1.8vh, 1.5rem); max-width: 33em; color: var(--menta);
   font-size: clamp(1.0625rem, 0.95rem + 0.5vw, 1.3125rem); line-height: 1.5;
 }
-.hero__acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.75rem; margin-top: clamp(1.25rem, 3.4vh, 2.25rem); }
+.hero__acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.75rem; margin-top: clamp(1rem, 2.6vh, 2rem); }
 
 /* a busca é o destaque da primeira tela: painel grande, campos e botão generosos */
 .busca {
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem 0.875rem; align-items: end;
-  margin-top: clamp(1.25rem, 3vh, 2.25rem); padding: clamp(1rem, 2.4vh, 1.375rem) 1.5rem clamp(1.125rem, 2.6vh, 1.5rem);
+  margin-top: clamp(1rem, 2.4vh, 2rem); padding: clamp(1rem, 2.4vh, 1.375rem) 1.5rem clamp(1.125rem, 2.6vh, 1.5rem);
   background: var(--concreto-claro); color: var(--tinta);
   border-radius: 0.375rem 3rem 0.375rem 0.375rem;
 }
@@ -244,13 +246,25 @@ p { text-wrap: pretty; }
 .busca__codigo-ok { min-height: 2.75rem; min-height: clamp(2.75rem, 5.6vh, 3.25rem); padding: 0 1.25rem; }
 
 .hero__prova {
-  display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin-top: clamp(1rem, 2.6vh, 1.75rem);
+  display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin-top: clamp(0.75rem, 1.8vh, 1.5rem);
   font-size: 0.9375rem; color: var(--menta);
 }
 .hero__prova li { display: inline-flex; align-items: center; gap: 0.5rem; }
 .hero__prova .i { width: 1.25rem; height: 1.25rem; color: var(--acafrao); }
-/* telas baixas (notebook pequeno): a faixa de prova some para a busca inteira caber */
-@media (min-width: 900px) and (max-height: 960px) { .hero__prova { display: none; } }
+/* a faixa de prova só aparece quando a primeira tela inteira cabe na janela (js/main.js decide); em telas muito baixas ela nem entra */
+.hero__prova.is-oculta { display: none; }
+@media (min-width: 900px) and (max-height: 780px) { .hero__prova { display: none; } }
+/* monitores e notebooks de altura média (até ~1040px de janela): campos e título um pouco menores,
+   para a primeira tela inteira (com a faixa de prova) caber na janela */
+@media (min-width: 900px) and (max-height: 1040px) {
+  .hero h1 { font-size: clamp(2.6rem, min(1.1rem + 5vw, 6.6vh), 5.4rem); }
+  .hero__sub { font-size: clamp(1rem, 0.9rem + 0.4vw, 1.2rem); }
+  .busca .select select { min-height: clamp(2.75rem, 5.2vh, 3.25rem); }
+  .busca .campo label { margin-bottom: 0.25rem; }
+  .busca__ok { min-height: clamp(3rem, 5.6vh, 3.5rem); }
+  .busca { row-gap: 0.5rem; }
+  .busca .busca__codigo .entrada, .busca__codigo-ok { min-height: clamp(2.5rem, 4.8vh, 3rem); }
+}
 /* notebooks de tela baixa: espaços e título menores para a busca (com a linha do código) caber na primeira tela */
 @media (min-width: 900px) and (max-height: 860px) {
   .hero__copy { padding-block: 1rem; }
