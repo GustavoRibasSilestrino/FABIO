@@ -45,7 +45,8 @@ A coluna "Hoje" diz o que já é real (informado pelo Fábio) e o que ainda é *
 | Textos de apresentação, "como funciona" e promessas | `public/index.html` | texto provisório, confirmar com o Fábio |
 | Instagram e depoimentos reais | ainda não existem na página | a adicionar |
 | Aviso "Imóveis de demonstração" e selos "Ilustrativo" | `.demo-nota` e `.selo--demo` | remover ao colocar imóveis reais |
-| `noindex` | `<meta name="robots">` em `public/index.html` | **remover** quando o site for ao ar de verdade, para o Google indexar |
+| Indexação no Google | `public/index.html` | `noindex` removido em 12/11/2026 (decisão do Gustavo), com `canonical` e `og:url` apontando para `https://fabioribasimoveis.com.br/`. O conteúdo ainda tem imóveis e fotos de exemplo |
+| Domínio | Vercel (projeto `fabio-imoveis`) e DNS no Registro.br; `vercel.json` redireciona `www` para o domínio principal | `fabioribasimoveis.com.br` |
 
 Para um novo imóvel, copie um bloco `<article class="imovel" …>` e ajuste `data-cidade`, `data-tipo` (casa, casa-condominio, sobrado, apartamento, terreno, chacara, sitio ou comercial), `data-bairro` e `data-quartos` (a busca usa esses quatro campos), a foto e os textos.
 
