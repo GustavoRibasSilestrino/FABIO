@@ -1,4 +1,4 @@
-/* Bairros de cada cidade, usados na busca do site e no painel (cadastro).
+/* Bairros de cada cidade, usados no painel (cadastro). A busca do site mostra só os bairros que têm imóvel cadastrado.
    Fonte: base de CEPs dos Correios, como publicada em cepsbrasil.com.br (consulta em 12/11/2026).
    Foram retirados os códigos de zoneamento ("Zona de Produção…") e um nome de outro município.
    Para incluir um bairro que falte, basta cadastrar um imóvel com "Outro bairro" no painel (ele
