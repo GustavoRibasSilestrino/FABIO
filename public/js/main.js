@@ -64,45 +64,55 @@
 
   // sem cidade escolhida, o campo mostra só a orientação "Escolha a cidade" (em tom mais suave)
   const marcaCidade = () => selCidade.classList.toggle('is-vazio', !selCidade.value);
+  const marcaTipo = () => selTipo.classList.toggle('is-vazio', !selTipo.value);
   const marcaBairro = () => selBairro.classList.toggle('is-vazio', !selBairro.value);
 
-  /* Bairros: ao escolher a cidade, o campo lista só os bairros que têm imóvel disponível agora
-     (cadastrado e ainda não vendido). A lista completa de bairros fica só no painel (js/bairros.js). */
+  /* Bairros: só depois de escolher a cidade E o tipo de imóvel, o campo lista TODOS os bairros da cidade
+     (js/bairros.js), mais qualquer bairro de imóvel cadastrado que não esteja na lista. Não existe
+     "todos os bairros": é preciso escolher um. Se não houver imóvel no bairro, a busca mostra o aviso
+     com o botão de WhatsApp. */
+  const BAIRROS = (window.FABIO && window.FABIO.BAIRROS) || {};
   const nomeBairroDoCartao = c => {
     const dd = c.querySelector('.etiqueta div:last-child dd');
     return dd ? dd.textContent.trim() : c.dataset.bairro;
   };
   const bairrosDaCidade = cidade => {
     const lista = new Map();
-    cards.filter(c => c.dataset.cidade === cidade && c.dataset.status !== 'vendido').forEach(c => {
+    (BAIRROS[cidade] || []).forEach(n => lista.set(normaliza(n), n));
+    cards.filter(c => c.dataset.cidade === cidade).forEach(c => {
       const n = nomeBairroDoCartao(c);
       if (n && !lista.has(normaliza(n))) lista.set(normaliza(n), n);
     });
     return [...lista.values()].sort((a, b) => a.localeCompare(b, 'pt-BR'));
   };
+  // o campo fica desligado (com a orientação no lugar do nome) até haver cidade e tipo escolhidos
   const preencheBairros = manter => {
     const cidade = selCidade.value;
     const atual = manter ? selBairro.value : '';
     selBairro.replaceChildren();
+    selBairro.disabled = true;
     if (!cidade) {
       selBairro.append(new Option('Escolha a cidade primeiro', ''));
-      selBairro.disabled = true;
+    } else if (!selTipo.value) {
+      selBairro.append(new Option('Escolha o tipo de imóvel primeiro', ''));
     } else {
+      const orienta = new Option('Escolha o bairro', '');
+      orienta.disabled = true;
+      orienta.selected = true;
+      selBairro.append(orienta);
       const bairros = bairrosDaCidade(cidade);
-      if (!bairros.length) {
-        selBairro.append(new Option('Sem imóveis disponíveis nesta cidade', ''));
-        selBairro.disabled = true;
-      } else {
-        selBairro.append(new Option('Todos os bairros', ''));
-        bairros.forEach(n => selBairro.append(new Option(n, n)));
-        selBairro.disabled = false;
-        if (atual && [...selBairro.options].some(o => o.value === atual)) selBairro.value = atual;
-      }
+      bairros.forEach(n => selBairro.append(new Option(n, n)));
+      selBairro.disabled = false;
+      if (atual && bairros.includes(atual)) selBairro.value = atual;
     }
     marcaBairro();
   };
-  selCidade.addEventListener('change', () => { marcaCidade(); preencheBairros(false); });
-  selBairro.addEventListener('change', marcaBairro);
+  selCidade.addEventListener('change', () => { marcaCidade(); preencheBairros(false); erroBusca(''); });
+  selTipo.addEventListener('change', () => { marcaTipo(); preencheBairros(false); erroBusca(''); });
+  selBairro.addEventListener('change', () => { marcaBairro(); erroBusca(''); });
+
+  const msgBusca = $('#busca-msg');
+  function erroBusca(txt) { msgBusca.textContent = txt; }
 
   const render = (animate) => {
     let shown = 0;
@@ -141,6 +151,12 @@
 
   form.addEventListener('submit', e => {
     e.preventDefault();
+    // a busca segue a ordem cidade → tipo → bairro, e os três são obrigatórios
+    const falta = !selCidade.value ? [selCidade, 'Escolha a cidade.']
+      : !selTipo.value ? [selTipo, 'Escolha o tipo de imóvel.']
+        : !selBairro.value ? [selBairro, 'Escolha o bairro.'] : null;
+    if (falta) { erroBusca(falta[1]); falta[0].focus(); return; }
+    erroBusca('');
     readSelects();
     render(true);
     const alvo = $('#imoveis');
@@ -153,6 +169,8 @@
     if (!chip) return;
     state.tipo = chip.dataset.tipo;
     selTipo.value = state.tipo;
+    marcaTipo();
+    preencheBairros(false);
     render(true);
   });
 
@@ -161,7 +179,9 @@
     state.cidade = selCidade.value; state.tipo = ''; state.bairro = ''; state.quartos = 0;
     selTipo.value = ''; selQuartos.value = '0';
     marcaCidade();
+    marcaTipo();
     preencheBairros(false);
+    erroBusca('');
   };
   $('#limpar').addEventListener('click', () => { limpaFiltros(); render(true); });
 
@@ -209,6 +229,7 @@
   });
 
   marcaCidade();
+  marcaTipo();
   marcaCodigos();
   preencheBairros(false);
   render(false);

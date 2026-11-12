@@ -216,6 +216,7 @@ p { text-wrap: pretty; }
   transform: translateY(-50%); pointer-events: none;
 }
 .busca__ok { grid-column: 1 / -1; min-height: clamp(3.25rem, 6.6vh, 3.75rem); margin-top: 0.25rem; padding: 0 1.8rem; font-size: 1.125rem; }
+.busca__msg { grid-column: 1 / -1; margin: 0; }
 .busca .select select:disabled { cursor: not-allowed; background: var(--concreto); border-color: rgba(16, 36, 28, 0.45); }
 
 /* busca pelo código do imóvel (segunda busca, dentro do mesmo painel) */
@@ -644,6 +645,7 @@ body:has(dialog.galeria[open]) { overflow: hidden; }
     background: var(--acafrao); color: var(--tinta);
   }
   .busca__ok:hover { background: var(--acafrao-hover); }
+  .busca__msg { order: 4; }
   .busca__codigo { order: 5; }
   .busca .busca__codigo .entrada, .busca__codigo-ok { min-height: 3.25rem; font-size: 1.0625rem; }
   .hero__acoes { order: 3; margin-top: 1rem; flex-direction: column; align-items: stretch; gap: 0.375rem; }
