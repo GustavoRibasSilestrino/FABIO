@@ -130,10 +130,10 @@ p { text-wrap: pretty; }
 
 .marca { display: inline-flex; align-items: center; gap: 0.75rem; text-decoration: none; }
 /* o logotipo do Fábio é transparente e vai direto sobre o fundo, sem moldura */
-.marca__logo { flex: none; display: grid; place-items: center; width: 3.5rem; height: 3.5rem; }
-.marca__logo img { width: 100%; height: 100%; object-fit: contain; }
+.marca__logo { flex: none; display: block; height: 3.5rem; }
+.marca__logo img { display: block; width: auto; height: 100%; }
 /* rodapé: o logotipo inteiro (nome e CRECI já fazem parte dele) */
-.rodape__marca .marca__logo { width: 11rem; height: 11rem; }
+.rodape__marca .marca__logo { height: 10rem; }
 .rodape__marca .marca__txt { display: none; }
 @media (max-width: 359px) { .topo .marca__txt { display: none; } }
 .marca__txt { display: grid; line-height: 1; }
