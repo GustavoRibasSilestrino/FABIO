@@ -42,6 +42,7 @@
 
   /* ---------- Busca e filtro dos imóveis ---------- */
   const form = $('#busca');
+  const selCidade = $('#f-cidade');
   const selTipo = $('#f-tipo');
   const selBairro = $('#f-bairro');
   const selQuartos = $('#f-quartos');
@@ -50,13 +51,28 @@
   const resultado = $('#resultado');
   const vazio = $('#vazio');
 
-  const state = { tipo: '', bairro: '', quartos: 0 };
+  const state = { cidade: '', tipo: '', bairro: '', quartos: 0 };
+
+  // os bairros listados dependem da cidade escolhida
+  const ajustaBairros = () => {
+    const cidade = selCidade.value;
+    Array.from(selBairro.options).forEach(op => {
+      if (!op.value) return;
+      const fora = Boolean(cidade) && op.dataset.cidade !== cidade;
+      op.disabled = fora;
+      op.hidden = fora;
+    });
+    const atual = selBairro.selectedOptions[0];
+    if (atual && atual.disabled) selBairro.value = '';
+  };
+  selCidade.addEventListener('change', ajustaBairros);
 
   const render = (animate) => {
     let shown = 0;
     cards.forEach(card => {
       const d = card.dataset;
       const ok =
+        (!state.cidade || d.cidade === state.cidade) &&
         (!state.tipo || d.tipo === state.tipo) &&
         (!state.bairro || d.bairro === state.bairro) &&
         (!state.quartos || Number(d.quartos) >= state.quartos);
@@ -78,6 +94,7 @@
   };
 
   const readSelects = () => {
+    state.cidade = selCidade.value;
     state.tipo = selTipo.value;
     state.bairro = selBairro.value;
     state.quartos = Number(selQuartos.value);
@@ -99,8 +116,9 @@
   }));
 
   $('#limpar').addEventListener('click', () => {
-    state.tipo = ''; state.bairro = ''; state.quartos = 0;
-    selTipo.value = ''; selBairro.value = ''; selQuartos.value = '0';
+    state.cidade = ''; state.tipo = ''; state.bairro = ''; state.quartos = 0;
+    selCidade.value = ''; selTipo.value = ''; selBairro.value = ''; selQuartos.value = '0';
+    ajustaBairros();
     render(true);
   });
 

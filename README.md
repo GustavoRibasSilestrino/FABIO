@@ -41,7 +41,7 @@ A coluna "Hoje" diz o que já é real (informado pelo Fábio) e o que ainda é *
 | Fotos do topo, dos imóveis e dos ambientes | `public/assets/img/` (mantenha os nomes ou ajuste os `src` no HTML) | Unsplash |
 | Foto do Fábio | seção `#sobre` em `public/index.html` e `public/assets/img/fabio-ribas.jpg` | foto real (enviada pelo Fábio) |
 | Imóveis (código, bairro, quartos, preço, texto) | cartões `.imovel` em `public/index.html` | 6 exemplos |
-| Bairros da busca | `<select id="f-bairro">` em `public/index.html` | exemplos |
+| Cidades e bairros da busca | `<select id="f-cidade">` e `<select id="f-bairro">` em `public/index.html` (cada bairro tem `data-cidade`; cada imóvel tem `data-cidade`) | cidades da região e bairros de exemplo; confirmar com o Fábio |
 | Textos de apresentação, "como funciona" e promessas | `public/index.html` | texto provisório, confirmar com o Fábio |
 | Instagram e depoimentos reais | ainda não existem na página | a adicionar |
 | Aviso "Imóveis de demonstração" e selos "Ilustrativo" | `.demo-nota` e `.selo--demo` | remover ao colocar imóveis reais |

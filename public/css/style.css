@@ -129,11 +129,8 @@ p { text-wrap: pretty; }
 .topo__in { display: flex; align-items: center; gap: 1.25rem; min-height: var(--topo-h); }
 
 .marca { display: inline-flex; align-items: center; gap: 0.75rem; text-decoration: none; }
-/* o logotipo do Fábio (transparente) vai sobre um arco claro, para o preto e o dourado ficarem legíveis */
-.marca__logo {
-  flex: none; display: grid; place-items: center; width: 3.25rem; height: 3.25rem;
-  background: var(--concreto-claro); border-radius: 62.4375rem 62.4375rem 0.25rem 0.25rem; overflow: hidden;
-}
+/* o logotipo do Fábio é transparente e vai direto sobre o fundo, sem moldura */
+.marca__logo { flex: none; display: grid; place-items: center; width: 3.5rem; height: 3.5rem; }
 .marca__logo img { width: 100%; height: 100%; object-fit: contain; }
 /* rodapé: o logotipo inteiro (nome e CRECI já fazem parte dele) */
 .rodape__marca .marca__logo { width: 9rem; height: 9rem; }
@@ -187,7 +184,7 @@ p { text-wrap: pretty; }
 
 /* a busca é o destaque da primeira tela: painel grande, campos e botão generosos */
 .busca {
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem 0.875rem; align-items: end;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem 0.875rem; align-items: end;
   margin-top: clamp(1.25rem, 3vh, 2.25rem); padding: clamp(1rem, 2.4vh, 1.375rem) 1.5rem clamp(1.125rem, 2.6vh, 1.5rem);
   background: var(--concreto-claro); color: var(--tinta);
   border-radius: 0.375rem 3rem 0.375rem 0.375rem;
@@ -219,7 +216,7 @@ p { text-wrap: pretty; }
 .hero__prova li { display: inline-flex; align-items: center; gap: 0.5rem; }
 .hero__prova .i { width: 1.25rem; height: 1.25rem; color: var(--acafrao); }
 /* telas baixas (notebook pequeno): a faixa de prova some para a busca inteira caber */
-@media (min-width: 900px) and (max-height: 820px) { .hero__prova { display: none; } }
+@media (min-width: 900px) and (max-height: 960px) { .hero__prova { display: none; } }
 
 /* arcos: profundidade por camadas de cor chapada */
 .hero__arte { position: relative; align-self: end; height: clamp(21.25rem, 74vh, 41.25rem); min-width: 0; }
@@ -534,12 +531,14 @@ p { text-wrap: pretty; }
   .busca__titulo { font-size: clamp(1.75rem, 7.6vw, 2.25rem); }
   .busca .campo label { font-size: 1rem; }
   .busca .select select {
-    min-height: clamp(3.5rem, 16vw, 4.25rem); font-size: clamp(1rem, 4.4vw, 1.125rem);
+    min-height: clamp(3.25rem, 14.5vw, 4rem); font-size: clamp(1rem, 4.4vw, 1.125rem);
     padding: 0 2rem 0 0.875rem;
   }
-  .busca .campo:nth-of-type(1) { order: 1; }
-  .busca .campo:nth-of-type(3) { order: 2; }
-  .busca .campo:nth-of-type(2) { order: 3; grid-column: 1 / -1; }
+  /* cidade (linha inteira) · tipo | quartos · bairro (linha inteira) */
+  .busca .campo:nth-of-type(1) { order: 1; grid-column: 1 / -1; }
+  .busca .campo:nth-of-type(2) { order: 2; }
+  .busca .campo:nth-of-type(4) { order: 3; }
+  .busca .campo:nth-of-type(3) { order: 4; grid-column: 1 / -1; }
   .busca__ok {
     order: 4; min-height: clamp(3.75rem, 17vw, 4.5rem); font-size: 1.1875rem;
     background: var(--acafrao); color: var(--tinta);
