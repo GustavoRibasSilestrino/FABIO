@@ -46,6 +46,8 @@ create table if not exists public.imoveis (
   vagas         smallint check (vagas between 0 and 50),
   area_terreno  numeric(10, 2) check (area_terreno >= 0),     -- m² do terreno
   area_construida numeric(10, 2) check (area_construida >= 0), -- m² construídos (ou do apartamento)
+  andar         smallint check (andar between 0 and 200),      -- só apartamento; 0 = térreo
+  posicao_solar text check (posicao_solar in ('nascente', 'poente', 'norte', 'sul')), -- só apartamento
   preco         bigint check (preco >= 0),          -- em reais; vazio = "Consulte"
   descricao     text check (char_length(descricao) <= 4000),
   fotos         text[] not null default '{}' check (cardinality(fotos) <= 30),
@@ -59,6 +61,11 @@ create table if not exists public.imoveis (
 -- Está também em supabase/migracoes/2026-11-12-metragens.sql.
 alter table public.imoveis add column if not exists area_terreno numeric(10, 2) check (area_terreno >= 0);
 alter table public.imoveis add column if not exists area_construida numeric(10, 2) check (area_construida >= 0);
+
+-- Bancos criados antes do andar e da posição solar (13/11/2026) ganham as duas colunas aqui.
+-- Está também em supabase/migracoes/2026-11-13-proprietario-andar-sol.sql.
+alter table public.imoveis add column if not exists andar smallint check (andar between 0 and 200);
+alter table public.imoveis add column if not exists posicao_solar text check (posicao_solar in ('nascente', 'poente', 'norte', 'sul'));
 
 create index if not exists imoveis_vitrine_idx
   on public.imoveis (status, destaque desc, criado_em desc);
@@ -111,6 +118,33 @@ drop policy if exists "admin apaga" on public.imoveis;
 create policy "admin apaga" on public.imoveis
   for delete to authenticated
   using (public.is_admin());
+
+
+-- 3b. Proprietário do imóvel (privado) -----------------------------------------------
+-- Nome e telefone do atual dono. Ficam numa tabela à parte porque "imoveis" é lida por qualquer
+-- visitante do site; esta aqui só o administrador lê e grava. Está também em
+-- supabase/migracoes/2026-11-13-proprietario-andar-sol.sql.
+create table if not exists public.imovel_proprietarios (
+  imovel_id     uuid primary key references public.imoveis (id) on delete cascade,
+  nome          text check (char_length(nome) <= 120),
+  telefone      text check (char_length(telefone) <= 30),
+  atualizado_em timestamptz not null default now()
+);
+
+drop trigger if exists imovel_proprietarios_atualizado on public.imovel_proprietarios;
+create trigger imovel_proprietarios_atualizado
+  before update on public.imovel_proprietarios
+  for each row execute function public.imoveis_toca_atualizado();
+
+alter table public.imovel_proprietarios enable row level security;
+revoke all on public.imovel_proprietarios from anon;
+grant select, insert, update, delete on public.imovel_proprietarios to authenticated;
+
+drop policy if exists "admin gerencia proprietarios" on public.imovel_proprietarios;
+create policy "admin gerencia proprietarios" on public.imovel_proprietarios
+  for all to authenticated
+  using (public.is_admin())
+  with check (public.is_admin());
 
 
 -- 4. Fotos (armazenamento) ---------------------------------------------------------

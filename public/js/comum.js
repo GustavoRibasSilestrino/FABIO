@@ -41,6 +41,16 @@
     ? 'Área do terreno (m²)'
     : (tipo === 'apartamento' ? 'Área do apartamento (m²)' : 'Área construída (m²)'));
 
+  // Só apartamento: andar (0 = térreo) e posição solar. O painel mostra a opção inteira; o anúncio, a forma curta.
+  const SOL = [
+    { v: 'nascente', t: 'Nascente (sol da manhã)', anuncio: 'Sol da manhã (nascente)' },
+    { v: 'poente', t: 'Poente (sol da tarde)', anuncio: 'Sol da tarde (poente)' },
+    { v: 'norte', t: 'Norte', anuncio: 'Posição solar norte' },
+    { v: 'sul', t: 'Sul', anuncio: 'Posição solar sul' }
+  ];
+  const textoSol = v => { const s = SOL.find(i => i.v === v); return s ? s.anuncio : ''; };
+  const textoAndar = n => (Number(n) === 0 ? 'Térreo' : `${Number(n)}º andar`);
+
   const rotulo = (lista, v) => {
     const item = lista.find(i => i.v === v);
     return item ? item.t : v;
@@ -57,7 +67,7 @@
 
   window.FABIO = Object.assign(window.FABIO || {}, {
     ativo: Boolean(base && key), base, key,
-    CIDADES, TIPOS, TIPOS_PLURAL, AREAS, areasDoTipo, rotuloArea,
+    CIDADES, TIPOS, TIPOS_PLURAL, AREAS, areasDoTipo, rotuloArea, SOL, textoSol, textoAndar,
     rotulo, caminhoMedio, fotoUrl, numero, moeda, plural
   });
 })();

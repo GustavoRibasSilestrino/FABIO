@@ -9,7 +9,7 @@
   if (!grade) return;
 
   const SVG_NS = 'http://www.w3.org/2000/svg';
-  const CAMPOS = 'id,codigo,titulo,tipo,cidade,bairro,quartos,banheiros,vagas,area_terreno,area_construida,preco,descricao,fotos,destaque,status';
+  const CAMPOS = 'id,codigo,titulo,tipo,cidade,bairro,quartos,banheiros,vagas,area_terreno,area_construida,andar,posicao_solar,preco,descricao,fotos,destaque,status';
   const porId = new Map();
 
   /* ---------- pequenas ajudas para montar HTML sem injetar texto ---------- */
@@ -46,6 +46,11 @@
     if (usa.includes('construida') && im.area_construida > 0) {
       // apartamento tem uma metragem só: "68 m²"; nos demais, "180 m² construídos"
       l.push(['i-area', im.tipo === 'apartamento' ? `${F.numero(im.area_construida)} m²` : `${F.numero(im.area_construida)} m² construídos`]);
+    }
+    // só apartamento: andar (0 = térreo) e posição solar
+    if (im.tipo === 'apartamento') {
+      if (im.andar != null) l.push(['i-building', F.textoAndar(im.andar)]);
+      if (im.posicao_solar) l.push(['i-sun', F.textoSol(im.posicao_solar)]);
     }
     return l;
   };

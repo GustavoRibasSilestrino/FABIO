@@ -188,6 +188,22 @@
           </div>
         </div>
         <p class="adm-ajuda" id="ajuda-areas"></p>
+
+        <div class="adm-grade adm-grade--areas" id="bloco-apartamento" hidden>
+          <div class="campo">
+            <label for="i-andar">Andar <span class="adm-opcional">(opcional)</span></label>
+            <input class="entrada" id="i-andar" type="number" inputmode="numeric" min="0" max="200" step="1" placeholder="Ex.: 5">
+            <p class="adm-ajuda">Use 0 para térreo.</p>
+          </div>
+          <div class="campo">
+            <label for="i-sol">Posição solar <span class="adm-opcional">(opcional)</span></label>
+            <div class="select">
+              <select id="i-sol"></select>
+              <svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg>
+            </div>
+            <p class="adm-ajuda">Nascente pega o sol da manhã; poente, o da tarde.</p>
+          </div>
+        </div>
       </fieldset>
 
       <fieldset class="adm-bloco">
@@ -201,6 +217,21 @@
           <label for="i-descricao">Descrição <span class="adm-opcional">(opcional)</span></label>
           <textarea class="entrada" id="i-descricao" rows="6" maxlength="4000" placeholder="Conte o que o imóvel tem de melhor, a localização, o que está incluso…"></textarea>
           <p class="adm-ajuda">Aparece quando o cliente abre as fotos do imóvel.</p>
+        </div>
+      </fieldset>
+
+      <fieldset class="adm-bloco">
+        <legend>Proprietário <span class="adm-opcional">(só você vê)</span></legend>
+        <p class="adm-ajuda">O nome e o telefone do atual dono do imóvel ficam guardados só no painel. Eles nunca aparecem no site.</p>
+        <div class="adm-grade adm-grade--areas">
+          <div class="campo">
+            <label for="i-dono-nome">Nome do proprietário <span class="adm-opcional">(opcional)</span></label>
+            <input class="entrada" id="i-dono-nome" type="text" autocomplete="off" maxlength="120" placeholder="Ex.: Maria Aparecida da Silva">
+          </div>
+          <div class="campo">
+            <label for="i-dono-tel">Telefone do proprietário <span class="adm-opcional">(opcional)</span></label>
+            <input class="entrada" id="i-dono-tel" type="tel" inputmode="tel" autocomplete="off" maxlength="30" placeholder="Ex.: (19) 99999-9999">
+          </div>
         </div>
       </fieldset>
 

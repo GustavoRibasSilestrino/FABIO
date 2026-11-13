@@ -52,6 +52,9 @@
       return 'Sem conexão com a internet. Confira e tente de novo.';
     }
     if (codigo === '23505' || texto.includes('duplicate key')) return 'Já existe um imóvel com esse código. Escolha outro.';
+    if (codigo === 'PGRST205' || codigo === '42P01' || codigo === '42703' || codigo === 'PGRST204' || texto.includes('schema cache')) {
+      return 'O banco ainda não tem os campos novos (proprietário, andar e posição solar). Rode o SQL supabase/migracoes/2026-11-13-proprietario-andar-sol.sql no Supabase.';
+    }
     if (texto.includes('rate limit') || (e && e.status === 429)) return 'Muitas tentativas. Espere alguns minutos e tente de novo.';
     if (texto.includes('password should be') || texto.includes('weak')) return 'Senha fraca. Use pelo menos 8 caracteres, com letras e números.';
     if (texto.includes('same password') || texto.includes('different from the old')) return 'A nova senha precisa ser diferente da atual.';
@@ -188,11 +191,20 @@
 
   /* ---------- lista ---------- */
   let imoveis = [];
+  let donos = new Map(); // id do imóvel -> { nome, telefone } (tabela privada imovel_proprietarios)
 
   const carregaLista = async () => {
     const { data, error } = await sb.from('imoveis').select('*').order('criado_em', { ascending: false });
     if (error) { aviso(msgErro(error), 'erro'); return; }
     imoveis = data || [];
+    // o proprietário mora em outra tabela, só do administrador; se ela falhar, a lista funciona sem ele
+    const resp = await sb.from('imovel_proprietarios').select('imovel_id,nome,telefone');
+    if (resp.error) {
+      donos = new Map();
+      aviso(msgErro(resp.error), 'erro');
+    } else {
+      donos = new Map((resp.data || []).map(d => [d.imovel_id, { nome: d.nome || '', telefone: d.telefone || '' }]));
+    }
     pintaLista();
   };
 
@@ -206,6 +218,17 @@
     $('#lista-resumo').textContent = imoveis.length
       ? `${imoveis.length} cadastrado${imoveis.length > 1 ? 's' : ''}, ${publicados} no site agora.`
       : '';
+  };
+
+  // "Proprietário: Maria · (19) 99999-9999" (o telefone liga ao toque, no celular); só aparece se houver o que mostrar
+  const linhaDono = dono => {
+    if (!dono || (!dono.nome && !dono.telefone)) return null;
+    const digitos = dono.telefone.replace(/[^\d+]/g, '');
+    return h('p', { class: 'adm-item__dono' },
+      'Proprietário: ',
+      dono.nome || null,
+      dono.nome && dono.telefone ? ' · ' : null,
+      dono.telefone ? h('a', { href: 'tel:' + digitos, text: dono.telefone }) : null);
   };
 
   const itemLista = im => {
@@ -223,6 +246,7 @@
         h('p', { class: 'adm-item__cod', text: `${im.codigo} · ${F.rotulo(F.TIPOS, im.tipo)} · ${im.bairro}` }),
         h('p', { class: 'adm-item__tit', text: titulo }),
         h('p', { class: 'adm-item__meta', text: `${preco} · ${F.rotulo(F.CIDADES, im.cidade)} · ${fotos.length} foto${fotos.length === 1 ? '' : 's'}` }),
+        linhaDono(donos.get(im.id)),
         h('div', { class: 'adm-item__sel' },
           h('span', { class: `adm-badge adm-badge--${im.status}`, text: SITUACAO[im.status] || im.status }),
           im.destaque ? h('span', { class: 'adm-badge adm-badge--destaque', text: 'Destaque' }) : null)
@@ -309,9 +333,13 @@
     apartamento: 'Informe a área do apartamento.',
     terreno: 'Informe o tamanho do terreno.'
   };
+  const selSol = $('#i-sol');
+  selSol.replaceChildren(h('option', { value: '', text: 'Não informar' }), ...F.SOL.map(s => h('option', { value: s.v, text: s.t })));
+
   const ajustaMedidas = () => {
     const tipo = selTipo.value;
     const usa = F.areasDoTipo(tipo);
+    $('#bloco-apartamento').hidden = tipo !== 'apartamento'; // andar e posição solar só em apartamento
     $('#campo-area-terreno').hidden = !usa.includes('terreno');
     $('#campo-area-construida').hidden = !usa.includes('construida');
     $('#rot-area-terreno').textContent = F.rotuloArea(tipo, 'terreno');
@@ -325,6 +353,7 @@
     titulo: $('#i-titulo'),
     quartos: $('#i-quartos'), banheiros: $('#i-banheiros'), vagas: $('#i-vagas'),
     areaTerreno: $('#i-area-terreno'), areaConstruida: $('#i-area-construida'),
+    andar: $('#i-andar'), sol: selSol, donoNome: $('#i-dono-nome'), donoTel: $('#i-dono-tel'),
     preco: $('#i-preco'), descricao: $('#i-descricao'), destaque: $('#i-destaque')
   };
   const radiosStatus = () => document.querySelectorAll('input[name="i-status"]');
@@ -365,7 +394,12 @@
     campos.vagas.value = novo || im.vagas == null ? '' : im.vagas;
     campos.areaTerreno.value = novo || im.area_terreno == null ? '' : String(im.area_terreno).replace('.', ',');
     campos.areaConstruida.value = novo || im.area_construida == null ? '' : String(im.area_construida).replace('.', ',');
+    campos.andar.value = novo || im.andar == null ? '' : im.andar;
+    campos.sol.value = novo ? '' : (im.posicao_solar || '');
     ajustaMedidas();
+    const dono = novo ? null : donos.get(im.id);
+    campos.donoNome.value = dono ? dono.nome : '';
+    campos.donoTel.value = dono ? dono.telefone : '';
     campos.preco.value = novo || im.preco == null ? '' : F.moeda(im.preco);
     campos.descricao.value = novo ? '' : (im.descricao || '');
     campos.destaque.checked = !novo && !!im.destaque;
@@ -491,6 +525,21 @@
     campos.preco.value = d ? Number(d).toLocaleString('pt-BR') : '';
   });
 
+  // telefone do proprietário: (19) 99999-9999 enquanto digita; número com "+" (de fora do país) fica como foi digitado
+  const formataTelefone = bruto => {
+    if (bruto.trim().startsWith('+')) return bruto.replace(/[^\d+\s()-]/g, '').slice(0, 30);
+    const d = bruto.replace(/\D/g, '').slice(0, 11);
+    if (d.length <= 2) return d.length ? `(${d}` : '';
+    if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
+    if (d.length <= 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+    return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+  };
+  campos.donoTel.addEventListener('input', () => {
+    // só reformata quando o cursor está no fim (quem edita no meio do número não é empurrado para o final)
+    const el = campos.donoTel;
+    if (el.selectionStart === el.value.length) el.value = formataTelefone(el.value);
+  });
+
   /* salvar */
   const numeroOuNulo = (campo, nome, { inteiro = false, max = 1e7 } = {}) => {
     // aceita "145,5", "145.5" e "1.250,75" (ponto como separador de milhar)
@@ -530,11 +579,23 @@
       ? numeroOuNulo(campos.areaTerreno, F.rotuloArea(campos.tipo.value, 'terreno').replace(' (m²)', ''), { max: 99999999 }) : { valor: null };
     const areaConstruida = usa.includes('construida')
       ? numeroOuNulo(campos.areaConstruida, F.rotuloArea(campos.tipo.value, 'construida').replace(' (m²)', ''), { max: 99999999 }) : { valor: null };
-    for (const r of [quartos, banheiros, vagas, areaTerreno, areaConstruida]) if (r.erro) return r;
+    // andar e posição solar: só apartamento; nos outros tipos ficam vazios (ex.: troca de apartamento para casa)
+    const apto = campos.tipo.value === 'apartamento';
+    const andar = apto ? numeroOuNulo(campos.andar, 'Andar', { inteiro: true, max: 200 }) : { valor: null };
+    for (const r of [quartos, banheiros, vagas, areaTerreno, areaConstruida, andar]) if (r.erro) return r;
+
+    // proprietário (guardado à parte, só o administrador vê): nome e telefone, ambos opcionais
+    const donoNome = campos.donoNome.value.trim();
+    const donoTel = campos.donoTel.value.trim();
+    if (donoTel && donoTel.replace(/\D/g, '').length < 8) {
+      campos.donoTel.setAttribute('aria-invalid', 'true');
+      return { erro: 'Confira o telefone do proprietário: faltam números (use o DDD).', campo: campos.donoTel };
+    }
 
     const digitos = campos.preco.value.replace(/\D/g, '');
     const status = [...radiosStatus()].find(r => r.checked).value;
     return {
+      dono: { nome: donoNome, telefone: donoTel },
       dados: {
         tipo: campos.tipo.value,
         cidade: campos.cidade.value,
@@ -545,6 +606,8 @@
         vagas: vagas.valor,
         area_terreno: areaTerreno.valor,
         area_construida: areaConstruida.valor,
+        andar: andar.valor,
+        posicao_solar: apto ? (campos.sol.value || null) : null,
         preco: digitos ? Number(digitos) : null,
         descricao: campos.descricao.value.trim() || null,
         destaque: campos.destaque.checked,
@@ -577,6 +640,30 @@
     edicao.novas = [];
 
     const salvo = resposta.data;
+
+    // proprietário: tabela à parte. Nome e telefone vazios = não há proprietário guardado
+    const { nome: donoNome, telefone: donoTel } = r.dono;
+    let falhaDono = null;
+    if (donoNome || donoTel) {
+      const { error } = await sb.from('imovel_proprietarios').upsert(
+        { imovel_id: salvo.id, nome: donoNome || null, telefone: donoTel || null }, { onConflict: 'imovel_id' });
+      falhaDono = error;
+    } else if (donos.has(salvo.id)) {
+      const { error } = await sb.from('imovel_proprietarios').delete().eq('imovel_id', salvo.id);
+      falhaDono = error;
+    }
+    if (falhaDono) {
+      // o imóvel já foi salvo: o formulário continua aberto para tentar de novo (agora como edição, sem duplicar)
+      edicao.novo = false;
+      edicao.codigo = salvo.codigo;
+      edicao.originais = [...edicao.fotos];
+      campos.codigo.value = salvo.codigo;
+      $('#form-cod').textContent = `Código ${salvo.codigo}`;
+      await carregaLista();
+      erroForm(`O imóvel ${salvo.codigo} foi salvo, mas o proprietário não: ${msgErro(falhaDono)}`);
+      return;
+    }
+
     await carregaLista();
     mostra('lista');
     aviso(salvo.status === 'ativo'
